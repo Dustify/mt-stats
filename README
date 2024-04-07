@@ -1,0 +1,1 @@
+npm config set @buf:registry  https://buf.build/gen/npm/v1/

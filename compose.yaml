@@ -1,0 +1,44 @@
+services:
+  web:
+    build: .
+    restart: always
+    ports:
+      # - "3000:3000" # enable if you need to access directly (i.e. opposed to something like nginx)
+    depends_on:
+      - db
+      - mqtt
+    environment:
+      POSTGRES_ADDRESS: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mt
+      MQTT_ADDRESS: mqtt://mqtt
+      MQTT_CLIENTID: mt-stats
+      DEFAULT_STATS_GATEWAYID: "!da65a048" # hex id (mac) of device to draw main stats from
+      DEFAULT_VOLTAGE_ID: 4201166220 # base 10 id of device to draw voltage stats from
+  db:
+    image: postgres:16
+    restart: always
+    ports:
+      - "5444:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mt
+    volumes:
+      - ./assets/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/postgresql/data
+  mqtt:
+    image: "eclipse-mosquitto:2"
+    restart: always
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./assets/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mqtt_data:/mosquitto/data
+      - mqtt_log:/mosquitto/log
+volumes:
+  db_data:
+  mqtt_data:
+  mqtt_log:

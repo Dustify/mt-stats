@@ -1,0 +1,5 @@
+sonar-scanner \
+  -Dsonar.projectKey=mt-stats \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=http://[HOST]:[PORT] \
+  -Dsonar.token=[TOKEN]

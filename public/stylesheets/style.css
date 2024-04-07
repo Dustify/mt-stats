@@ -1,0 +1,10 @@
+.gc {
+    height: 50vh;
+}
+
+@media (max-width: 1000px) {
+    .gc {
+        height: 25vh;
+        width: 200vh;
+    }
+}

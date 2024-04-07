@@ -20,8 +20,9 @@ Meshtastic stats collection and dashboard.
 
 ## Addendum
 
+npm might need the following option set to install packages:
+
 ```
-npm config set @buf:registry https://buf.
-build/gen/npm/v1/
+npm config set @buf:registry https://buf.build/gen/npm/v1/
 ```
 

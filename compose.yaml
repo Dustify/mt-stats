@@ -2,8 +2,8 @@ services:
   web:
     build: .
     restart: always
-    ports:
-      # - "3000:3000" # enable if you need to access directly (i.e. opposed to something like nginx)
+    # ports: # enable if you need to access directly (i.e. opposed to something like nginx)
+      # - "3000:3000" 
     depends_on:
       - db
       - mqtt

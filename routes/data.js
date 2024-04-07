@@ -282,6 +282,55 @@ router.get("/stats_pb/:gatewayId?", async (req, res, next) => {
     result.positions = positions.rows;
     decorateNodes(result.positions);
 
+    const routes = await pgc.query(`
+    SELECT 
+        distinct on (packet_from, packet_id)
+        "timestamp",
+        "packet_from",
+        "packet_to",
+        "TRACEROUTE_APP_route" as "route"
+    FROM 
+        public.raw_pb
+    where 
+        packet_decoded_portnum = 'TRACEROUTE_APP' and
+        "packet_decoded_requestId" is not null and
+        "timestamp" >= (NOW() - INTERVAL '1 DAYS') and
+        ${gatewayIdWhere}
+    ORDER BY 
+        "packet_from",
+        "packet_id"
+    `);
+
+    for (const route of routes.rows) {
+        const r = [];
+
+        const addNode = (id) => {
+            let t = "Unknown";
+            const info = result.nodeinfo.find(x => x.packet_from === id.toString());
+
+            if (info) {
+                t = `(${info.shortName}) ${info.longName}`;
+            }
+
+            r.push(t);
+        };
+
+        addNode(route.packet_from);
+
+        const p = JSON.parse(route.route);
+
+        if (p) {
+            p.reverse();
+            p.forEach(addNode);
+        }
+
+        addNode(route.packet_to);
+
+        route.result = r.join(" > ");
+    }
+
+    result.routes = routes.rows;
+
     // END
     await pgc.end();
     res.send(result);

@@ -240,6 +240,7 @@
     sortTimestampDesc(data.telemetry_env);
     sortTimestampDesc(data.nodeinfo);
     sortTimestampDesc(data.positions);
+    sortTimestampDesc(data.routes);
 
     const create_table = (req) => {
 
@@ -415,6 +416,15 @@
             "id",
             "hwModel",
             "role"
+        ]
+    });
+
+    create_table({
+        t: `Traceroutes (24 hours)`,
+        d: data.routes,
+        c: [
+            "timestamp",
+            "result"
         ]
     });
 

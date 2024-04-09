@@ -4,13 +4,13 @@ export default router;
 
 import { getPgClient } from "../util.js";
 
-router.get("/stats_pb/:gatewayId?", async (req, res, next) => {
+router.get("/stats_pb/:gatewayId", async (req, res, next) => {
     const pgc = getPgClient();
     await pgc.connect();
     const result = {};
     // START
 
-    const gatewayId = req.params.gatewayId || process.env["DEFAULT_STATS_GATEWAYID"];
+    const gatewayId = req.params.gatewayId;
 
     const gatewayIdWhere = `"gatewayId" = '${gatewayId}'`;
 
@@ -341,7 +341,7 @@ router.get("/voltage/:from?", async (req, res, next) => {
     await pgc.connect();
     // START
 
-    const from = req.params.from || process.env["DEFAULT_VOLTAGE_ID"];
+    const from = req.params.from;
 
     const result = await pgc.query(`
     SELECT
@@ -361,6 +361,28 @@ router.get("/voltage/:from?", async (req, res, next) => {
         "t"
     ORDER BY 
         "t" asc
+    `);
+
+    // END
+    await pgc.end();
+    res.send(result.rows);
+});
+
+router.get("/gateways", async (req, res, next) => {
+    const pgc = getPgClient();
+    await pgc.connect();
+    // START
+
+    const result = await pgc.query(`
+    SELECT
+        distinct ("gatewayId") as "gatewayId",
+        count(*) as "count"
+    FROM 
+        public.raw_pb
+    GROUP BY
+        "gatewayId"
+    ORDER BY 
+        "count" desc
     `);
 
     // END

@@ -1,6 +1,30 @@
-(async () => {
-    const data = await (await fetch("data/stats_pb")).json();
-    let vdata = await (await fetch("data/voltage")).json();
+let nfvc_node = "";
+
+const render = async () => {
+    const select = document.getElementById("gateways");
+    const gatewayId = select.value;
+
+    document.getElementById("wrapper_chart").innerHTML = "";
+    document.getElementById("wrapper_table").innerHTML = "";
+
+    const data = await (await fetch(`data/stats_pb/${gatewayId}`)).json();
+
+    const nfvc = document.getElementById("nfvc");
+    nfvc.innerHTML = "";
+
+    let gatewayIdBase10 = "";
+
+    for (const node of data.nodeinfo) {
+        if (node.id === gatewayId) {
+            gatewayIdBase10 = node.packet_from;
+        }
+
+        nfvc.innerHTML += `<option value="${node.packet_from}">(${node.shortName}) ${node.longName}</option>`;
+    }
+
+    nfvc.value = nfvc_node || gatewayIdBase10;
+
+    let vdata = await (await fetch(`data/voltage/${nfvc.value}`)).json();
 
     const x_axis = [];
 
@@ -110,6 +134,24 @@
         return result;
     };
 
+    vdata = expand(vdata);
+
+    create_chart({
+        sets: [{
+            name: "v_min",
+            data: vdata.map(x => x.v_min)
+        }, {
+            name: "v_max",
+            data: vdata.map(x => x.v_max)
+        }, {
+            name: "v_med",
+            data: vdata.map(x => x.v_med)
+        }, {
+            name: "v_avg",
+            data: vdata.map(x => x.v_avg)
+        }]
+    });
+
     data.hourly_stats = expand(data.hourly_stats);
 
     create_chart({
@@ -210,25 +252,6 @@
             data: data.hourly_stats.map(x => x.receivers)
         }]
     });
-
-    vdata = expand(vdata);
-
-    create_chart({
-        sets: [{
-            name: "v_min",
-            data: vdata.map(x => x.v_min)
-        }, {
-            name: "v_max",
-            data: vdata.map(x => x.v_max)
-        }, {
-            name: "v_med",
-            data: vdata.map(x => x.v_med)
-        }, {
-            name: "v_avg",
-            data: vdata.map(x => x.v_avg)
-        }]
-    });
-
 
     const sortTimestampDesc = (set) => {
         set.sort((a, b) => {
@@ -442,4 +465,28 @@
             "text"
         ]
     });
+};
+
+(async () => {
+    const gateways = await (await fetch("data/gateways")).json();
+    const select = document.getElementById("gateways");
+
+    select.innerHTML = "";
+
+    for (const gw of gateways) {
+        select.innerHTML += `<option value="${gw.gatewayId}">${gw.gatewayId}</option>`;
+    }
+
+    select.onchange = () => {
+        nfvc_node = "";
+        render();
+    };
+
+    const nfvc = document.getElementById("nfvc");
+    nfvc.onchange = () => {
+        nfvc_node = nfvc.value;
+        render();
+    };
+
+    render();
 })();

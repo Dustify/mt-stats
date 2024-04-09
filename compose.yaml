@@ -2,8 +2,8 @@ services:
   web:
     build: .
     restart: always
-    # ports: # enable if you need to access directly (i.e. opposed to something like nginx)
-      # - "3123:3000" 
+    ports: 
+      - "3123:3000" # change 3123 to another port if needed 
     depends_on:
       - db
       - mqtt
@@ -15,13 +15,11 @@ services:
       POSTGRES_DB: mt
       MQTT_ADDRESS: mqtt://mqtt
       MQTT_CLIENTID: mt-stats
-      DEFAULT_STATS_GATEWAYID: "!7c5acdc4" # hex id (mac) of device to draw main stats from
-      DEFAULT_VOLTAGE_ID: 4201166220 # base 10 id of device to draw voltage stats from
   db:
     image: postgres:16
     restart: always
     ports:
-      - "5444:5432"
+      - "5444:5432" # optional - allows direct connection to db with something like pgadmin
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password

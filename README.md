@@ -2,14 +2,17 @@
 Meshtastic stats collection and dashboard.
 
 ## Deployment
-1. If accessing the dashboard directly (i.e. without nginx or equivalent), uncomment the ports section in the "web" service of compose.yaml, set the host port as required.
-
-2. Update DEFAULT_STATS_GATEWAYID and DEFAULT_VOLTAGE_ID in compose.yaml.
-
-3. Bring up the containers
+Bring up the containers
 ```
 ./compose-up.sh
 ```
+or
+```
+docker compose up --build -d
+```
+
+## Open the web app
+Open the application in your browser e.g. http://localhost:3123/
 
 ## Meshtastic device MQTT config.
 

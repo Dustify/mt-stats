@@ -128,6 +128,11 @@ import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/tele
             try {
                 const p = ServiceEnvelope.fromBinary(row.data).toJson();
 
+                if (!p.packet.decoded) {
+                    // console.log("No decode!", p.packet.decoded);
+                    continue;
+                }
+
                 log(p.packet.decoded.portnum, p.packet.from, p.packet.to);
 
                 const result = [

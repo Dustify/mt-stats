@@ -3,7 +3,7 @@ services:
     build: .
     restart: always
     # ports: # enable if you need to access directly (i.e. opposed to something like nginx)
-      # - "3000:3000" 
+      # - "3123:3000" 
     depends_on:
       - db
       - mqtt
@@ -15,7 +15,7 @@ services:
       POSTGRES_DB: mt
       MQTT_ADDRESS: mqtt://mqtt
       MQTT_CLIENTID: mt-stats
-      DEFAULT_STATS_GATEWAYID: "!da65a048" # hex id (mac) of device to draw main stats from
+      DEFAULT_STATS_GATEWAYID: "!7c5acdc4" # hex id (mac) of device to draw main stats from
       DEFAULT_VOLTAGE_ID: 4201166220 # base 10 id of device to draw voltage stats from
   db:
     image: postgres:16

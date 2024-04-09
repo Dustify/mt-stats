@@ -336,11 +336,12 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
     res.send(result);
 });
 
-router.get("/voltage/:from?", async (req, res, next) => {
+router.get("/voltage/:gatewayId/:from", async (req, res, next) => {
     const pgc = getPgClient();
     await pgc.connect();
     // START
 
+    const gid = req.params.gatewayId;
     const from = req.params.from;
 
     const result = await pgc.query(`
@@ -354,6 +355,7 @@ router.get("/voltage/:from?", async (req, res, next) => {
         public.raw_pb
     WHERE
         "packet_from" = ${from} and
+        "gatewayId" = '${gid}' and
         "packet_decoded_portnum" = 'TELEMETRY_APP' and
         "TELEMETRY_APP_deviceMetrics_voltage" is not null and
         "timestamp" >= (NOW() - INTERVAL '7 DAYS')
@@ -373,7 +375,24 @@ router.get("/gateways", async (req, res, next) => {
     await pgc.connect();
     // START
 
-    const result = await pgc.query(`
+    const names = (await pgc.query(`
+    SELECT
+        distinct on ("NODEINFO_APP_id") 
+        "NODEINFO_APP_id" as "id",
+        "NODEINFO_APP_shortName" as "short",
+        "NODEINFO_APP_longName" as "long"
+    FROM 
+        public.raw_pb
+
+    WHERE
+        "NODEINFO_APP_id" is not null
+
+    order by 
+        "NODEINFO_APP_id",
+        "timestamp" desc
+    `)).rows;
+
+    const gws = (await pgc.query(`
     SELECT
         distinct ("gatewayId") as "gatewayId",
         count(*) as "count"
@@ -383,9 +402,17 @@ router.get("/gateways", async (req, res, next) => {
         "gatewayId"
     ORDER BY 
         "count" desc
-    `);
+    `)).rows;
+
+    for (const gw of gws) {
+        const name = names.find(x => x.id === gw.gatewayId);
+        
+        if (name) {
+            gw.name = `(${name.short}) ${name.long}`
+        }
+    }
 
     // END
     await pgc.end();
-    res.send(result.rows);
+    res.send(gws);
 });

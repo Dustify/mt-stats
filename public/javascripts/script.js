@@ -24,7 +24,7 @@ const render = async () => {
 
     nfvc.value = nfvc_node || gatewayIdBase10;
 
-    let vdata = await (await fetch(`data/voltage/${nfvc.value}`)).json();
+    let vdata = await (await fetch(`data/voltage/${gatewayId}/${nfvc.value}`)).json();
 
     const x_axis = [];
 
@@ -474,7 +474,13 @@ const render = async () => {
     select.innerHTML = "";
 
     for (const gw of gateways) {
-        select.innerHTML += `<option value="${gw.gatewayId}">${gw.gatewayId}</option>`;
+        let text = gw.gatewayId;
+
+        if (gw.name) {
+            text += " " + gw.name;
+        }
+
+        select.innerHTML += `<option value="${gw.gatewayId}">${text}</option>`;
     }
 
     select.onchange = () => {

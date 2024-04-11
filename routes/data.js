@@ -68,6 +68,7 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
         "NODEINFO_APP_shortName" as "shortName",
         "NODEINFO_APP_hwModel" as "hwModel",
         "NODEINFO_APP_role" as "role",
+        "NODEINFO_APP_isLicensed" as "isLicensed",
         "timestamp"
     FROM 
         public.raw_pb
@@ -398,6 +399,8 @@ router.get("/gateways", async (req, res, next) => {
         count(*) as "count"
     FROM 
         public.raw_pb
+    WHERE
+        "gatewayId" is not null
     GROUP BY
         "gatewayId"
     ORDER BY 

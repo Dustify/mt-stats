@@ -5,7 +5,7 @@
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
 -- Dumped by pg_dump version 16.2 (Ubuntu 16.2-1.pgdg22.04+1)
 
--- Started on 2024-04-07 00:07:50 BST
+-- Started on 2024-04-11 19:25:44 BST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -112,14 +112,15 @@ CREATE TABLE public.raw_pb (
     "POSITION_APP_timestamp" bigint,
     "POSITION_APP_seqNumber" bigint,
     "packet_hopStart" integer,
-    id integer NOT NULL
+    id integer NOT NULL,
+    "NODEINFO_APP_isLicensed" boolean
 );
 
 
 ALTER TABLE public.raw_pb OWNER TO postgres;
 
 --
--- TOC entry 216 (class 1259 OID 16413)
+-- TOC entry 216 (class 1259 OID 16394)
 -- Name: raw_pb_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -144,7 +145,7 @@ ALTER SEQUENCE public.raw_pb_id_seq OWNED BY public.raw_pb.id;
 
 
 --
--- TOC entry 3207 (class 2604 OID 16414)
+-- TOC entry 3207 (class 2604 OID 16395)
 -- Name: raw_pb id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -152,7 +153,7 @@ ALTER TABLE ONLY public.raw_pb ALTER COLUMN id SET DEFAULT nextval('public.raw_p
 
 
 --
--- TOC entry 3209 (class 2606 OID 16416)
+-- TOC entry 3209 (class 2606 OID 16397)
 -- Name: raw_pb raw_pb_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -160,7 +161,7 @@ ALTER TABLE ONLY public.raw_pb
     ADD CONSTRAINT raw_pb_pkey PRIMARY KEY (id);
 
 
--- Completed on 2024-04-07 00:07:50 BST
+-- Completed on 2024-04-11 19:25:45 BST
 
 --
 -- PostgreSQL database dump complete

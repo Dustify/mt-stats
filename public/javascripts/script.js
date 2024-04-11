@@ -438,7 +438,8 @@ const render = async () => {
             "longName",
             "id",
             "hwModel",
-            "role"
+            "role",
+            "isLicensed"
         ]
     });
 

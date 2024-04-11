@@ -39,6 +39,22 @@ import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/tele
     const pgc = getPgClient();
     await pgc.connect();
 
+    // SQL UPDATES
+    const sql_updates = [
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN "NODEINFO_APP_isLicensed" boolean;`
+    ];
+
+    for (const sql_update of sql_updates) {
+        try {
+            console.log("Executing SQL schema update: " + sql_update);
+            await pgc.query(sql_update);
+            console.log("> Schema update complete");
+        }
+        catch (error) {
+            console.log("> WARNING: Schema update failed, it may have been executed previously");
+        }
+    }
+
     const processObject = (o, prefix, result) => {
         for (const p in o) {
             const key = prefix + p;
@@ -112,7 +128,6 @@ import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/tele
                 catch (error) {
                     const col = /.*column "(.*?)".*/.exec(error?.message)[1] || "";
                     console.log(error.message, col, result.find(x => x.key === col).value);
-                    debugger
                 }
             }
             catch (err) {

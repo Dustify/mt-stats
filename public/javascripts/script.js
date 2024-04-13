@@ -272,7 +272,19 @@ const render = async () => {
         html += `<table class="table table-bordered"><thead><tr>`;
 
         for (const c of req.c) {
-            html += `<th scope="col">${c}</th>`;
+            let result = c;
+
+            if (req.sum && req.sum.indexOf(c) > -1) {
+                let sum = 0;
+
+                for (const d of req.d) {
+                    sum += parseInt(d[c]);
+                }
+
+                result += ` (${sum})`;
+            }
+
+            html += `<th scope="col">${result}</th>`;
         }
 
         // header
@@ -334,6 +346,24 @@ const render = async () => {
             "d_tr",
             "d_tr_wr",
             "admin"
+        ],
+        sum: [
+            "count",
+            "c_text",
+            "c_nodeinfo",
+            "c_nodeinfo_wr",
+            "c_telemetry",
+            "c_position",
+            "c_position_wr",
+            "d_text",
+            "d_nodeinfo",
+            "d_nodeinfo_wr",
+            "d_position",
+            "d_position_wr",
+            "d_routing",
+            "d_tr",
+            "d_tr_wr",
+            "admin"
         ]
     });
 
@@ -344,6 +374,23 @@ const render = async () => {
             "packet_to",
             "to_shortname",
             "to_longname",
+            "count",
+            "c_text",
+            "c_nodeinfo",
+            "c_nodeinfo_wr",
+            "c_telemetry",
+            "c_position",
+            "c_position_wr",
+            "d_text",
+            "d_nodeinfo",
+            "d_nodeinfo_wr",
+            "d_position",
+            "d_position_wr",
+            "d_routing",
+            "d_tr",
+            "d_tr_wr"
+        ],
+        sum: [
             "count",
             "c_text",
             "c_nodeinfo",

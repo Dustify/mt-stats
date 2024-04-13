@@ -144,7 +144,8 @@ import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/tele
                 const p = ServiceEnvelope.fromBinary(row.data).toJson();
 
                 if (!p.packet.decoded) {
-                    // console.log("No decode!", p.packet.decoded);
+                    console.log("No decode, deleting", p.packet);
+                    await pgc.query(`delete from raw_pb where id = ${row.id}`);
                     continue;
                 }
 

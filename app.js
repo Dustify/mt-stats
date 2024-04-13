@@ -34,6 +34,7 @@ const log = (...data) => {
 import { ServiceEnvelope } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/mqtt_pb.js";
 import { User, RouteDiscovery, Position, Routing } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/mesh_pb.js"
 import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/telemetry_pb.js";
+import { AdminMessage } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/admin_pb.js";
 
 (async function () {
     const pgc = getPgClient();
@@ -41,9 +42,12 @@ import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/tele
 
     // SQL UPDATES
     const sql_updates = [
-        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "NODEINFO_APP_isLicensed" boolean;`,
-        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "packet_decoded_replyId" bigint;`,
-        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "packet_decoded_emoji" bigint;`
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "NODEINFO_APP_isLicensed" boolean`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "packet_decoded_replyId" bigint`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "packet_decoded_emoji" bigint`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_setOwner_longName" character varying(128)`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_setOwner_shortName" character varying(8)`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_beginEditSettings" boolean`
     ];
 
     for (const sql_update of sql_updates) {
@@ -87,7 +91,8 @@ import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/tele
                     "POSITION_APP": Position,
                     "TELEMETRY_APP": Telemetry,
                     "ROUTING_APP": Routing,
-                    "TEXT_MESSAGE_APP": { fromBinary: s => s.toString() }
+                    "TEXT_MESSAGE_APP": { fromBinary: s => s.toString() },
+                    "ADMIN_APP": AdminMessage
                 };
 
                 const type = row.packet_decoded_portnum;

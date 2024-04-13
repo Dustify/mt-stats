@@ -41,7 +41,8 @@ import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/tele
 
     // SQL UPDATES
     const sql_updates = [
-        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN "NODEINFO_APP_isLicensed" boolean;`
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN "NODEINFO_APP_isLicensed" boolean;`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN "packet_decoded_replyId" bigint;`
     ];
 
     for (const sql_update of sql_updates) {

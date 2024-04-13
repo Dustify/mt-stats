@@ -5,7 +5,7 @@
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
 -- Dumped by pg_dump version 16.2 (Ubuntu 16.2-1.pgdg22.04+1)
 
--- Started on 2024-04-13 13:12:54 BST
+-- Started on 2024-04-13 13:54:58 BST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -114,7 +114,8 @@ CREATE TABLE public.raw_pb (
     "packet_hopStart" integer,
     id integer NOT NULL,
     "NODEINFO_APP_isLicensed" boolean,
-    "packet_decoded_replyId" bigint
+    "packet_decoded_replyId" bigint,
+    packet_decoded_emoji bigint
 );
 
 
@@ -162,7 +163,7 @@ ALTER TABLE ONLY public.raw_pb
     ADD CONSTRAINT raw_pb_pkey PRIMARY KEY (id);
 
 
--- Completed on 2024-04-13 13:12:54 BST
+-- Completed on 2024-04-13 13:54:59 BST
 
 --
 -- PostgreSQL database dump complete

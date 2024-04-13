@@ -271,8 +271,18 @@ const render = async () => {
         html += `<h3>${req.t}</h3>`;
         html += `<table class="table table-bordered"><thead><tr>`;
 
-        for (const c of req.c) {
-            let result = c;
+        let sums = {};
+
+        if (req.mh) {
+            for (const mh of req.mh) {
+                html += `<th colspan="${mh.c}">${mh.t}</th>`;
+            }
+
+            html += "</tr><tr>";
+        }
+
+        for (const [i, c] of req.c.entries()) {
+            let result = (req.cn && req.cn[i]) || c;
 
             if (req.sum && req.sum.indexOf(c) > -1) {
                 let sum = 0;
@@ -281,7 +291,9 @@ const render = async () => {
                     sum += parseInt(d[c]);
                 }
 
-                result += ` (${sum})`;
+                sums[c] = sum;
+
+                result += `<br />${sum}`;
             }
 
             html += `<th scope="col">${result}</th>`;
@@ -309,6 +321,12 @@ const render = async () => {
 
                 if (c === "latitude" || c === "longitude") {
                     v = parseFloat(v || 0).toFixed(7);
+                }
+
+                if (v && sums[c]) {
+                    const pct = (v / sums[c] * 100).toFixed(2);
+
+                    v += `<br />${pct}%`;
                 }
 
                 html += `<td>${v}</td>`;
@@ -346,6 +364,32 @@ const render = async () => {
             "d_tr",
             "d_tr_wr",
             "admin"
+        ],
+        mh: [
+            { t: "", c: 4 },
+            { t: "Channel", c: 6 },
+            { t: "Direct", c: 8 },
+        ],
+        cn: [
+            "From",
+            "SName",
+            "LName",
+            "Count",
+            "Text",
+            "NI",
+            "NI (WR)",
+            "Tele.",
+            "Pos.",
+            "Pos. (WR)",
+            "Text",
+            "NI",
+            "NI (WR)",
+            "Pos.",
+            "Pos. (WR)",
+            "Routing",
+            "Trace",
+            "Trace (WR)",
+            "Admin"
         ],
         sum: [
             "count",
@@ -389,6 +433,31 @@ const render = async () => {
             "d_routing",
             "d_tr",
             "d_tr_wr"
+        ],
+        mh: [
+            { t: "", c: 4 },
+            { t: "Channel", c: 6 },
+            { t: "Direct", c: 8 },
+        ],
+        cn: [
+            "To",
+            "SName",
+            "LName",
+            "Count",
+            "Text",
+            "NI",
+            "NI (WR)",
+            "Tele.",
+            "Pos.",
+            "Pos. (WR)",
+            "Text",
+            "NI",
+            "NI (WR)",
+            "Pos.",
+            "Pos. (WR)",
+            "Routing",
+            "Trace",
+            "Trace (WR)",
         ],
         sum: [
             "count",

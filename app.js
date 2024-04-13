@@ -75,7 +75,7 @@ import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/tele
     };
 
     const extract = async () => {
-        const rows = (await pgc.query(`select id, packet_decoded_portnum, packet_decoded_payload from raw_pb where extracted = false`)).rows;
+        const rows = (await pgc.query(`select id, packet_decoded_portnum, packet_decoded_payload from raw_pb where expanded = true and extracted = false`)).rows;
 
         for (const row of rows) {
             try {

@@ -57,7 +57,7 @@ import { AdminMessage } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/a
             console.log("> Schema update complete");
         }
         catch (error) {
-            console.log("> WARNING: Schema update failed, it may have been executed previously");
+            console.log("> WARNING: Schema update failed");
         }
     }
 

@@ -332,7 +332,8 @@ const render = async () => {
             "d_position_wr",
             "d_routing",
             "d_tr",
-            "d_tr_wr"
+            "d_tr_wr",
+            "admin"
         ]
     });
 

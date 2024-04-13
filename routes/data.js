@@ -185,7 +185,8 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'POSITION_APP') AS "d_position_wr",
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'ROUTING_APP') AS "d_routing",
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'TRACEROUTE_APP') AS "d_tr",
-	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'TRACEROUTE_APP') AS "d_tr_wr"
+	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'TRACEROUTE_APP') AS "d_tr_wr",
+        count(*) filter (where packet_decoded_portnum = 'ADMIN_APP') AS "admin"
     FROM 
         public.raw_pb
     WHERE
@@ -409,7 +410,7 @@ router.get("/gateways", async (req, res, next) => {
 
     for (const gw of gws) {
         const name = names.find(x => x.id === gw.gatewayId);
-        
+
         if (name) {
             gw.name = `(${name.short}) ${name.long}`
         }

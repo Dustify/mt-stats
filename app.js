@@ -47,7 +47,8 @@ import { AdminMessage } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/a
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "packet_decoded_emoji" bigint`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_setOwner_longName" character varying(128)`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_setOwner_shortName" character varying(8)`,
-        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_beginEditSettings" boolean`
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_beginEditSettings" boolean`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "RANGE_TEST_APP_value" character varying(128)`        
     ];
 
     for (const sql_update of sql_updates) {
@@ -93,7 +94,8 @@ import { AdminMessage } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/a
                     "TELEMETRY_APP": Telemetry,
                     "ROUTING_APP": Routing,
                     "TEXT_MESSAGE_APP": { fromBinary: s => s.toString() },
-                    "ADMIN_APP": AdminMessage
+                    "ADMIN_APP": AdminMessage,
+                    "RANGE_TEST_APP": { fromBinary: s => s.toString() },
                 };
 
                 const type = row.packet_decoded_portnum;

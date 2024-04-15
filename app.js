@@ -72,7 +72,8 @@ import { AdminMessage } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/a
                 const c = { key: key, value: v };
 
                 if (typeof c.value === "string") {
-                    c.value = `'${c.value}'`;
+                    const v = c.value.replaceAll("'", "''");
+                    c.value = `'${v}'`;
                 }
 
                 result.push(c);

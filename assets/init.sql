@@ -5,7 +5,7 @@
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
 -- Dumped by pg_dump version 16.2 (Ubuntu 16.2-1.pgdg22.04+1)
 
--- Started on 2024-04-15 19:53:39 BST
+-- Started on 2024-04-15 21:52:14 BST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -119,7 +119,8 @@ CREATE TABLE public.raw_pb (
     "ADMIN_APP_setOwner_longName" character varying(128),
     "ADMIN_APP_setOwner_shortName" character varying(8),
     "ADMIN_APP_beginEditSettings" boolean,
-    "RANGE_TEST_APP_value" character varying(128)
+    "RANGE_TEST_APP_value" character varying(128),
+    packet_channel bigint
 );
 
 
@@ -167,7 +168,7 @@ ALTER TABLE ONLY public.raw_pb
     ADD CONSTRAINT raw_pb_pkey PRIMARY KEY (id);
 
 
--- Completed on 2024-04-15 19:53:39 BST
+-- Completed on 2024-04-15 21:52:15 BST
 
 --
 -- PostgreSQL database dump complete

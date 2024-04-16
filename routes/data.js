@@ -12,8 +12,6 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
 
     const gatewayId = req.params.gatewayId;
 
-    const gatewayIdWhere = `"gatewayId" = '${gatewayId}'`;
-
     const hourly_stats = await pgc.query(`
     SELECT
         date_trunc('hour', "timestamp") as "t",
@@ -50,12 +48,14 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
         public.raw_pb
     WHERE
         "timestamp" >= (NOW() - INTERVAL '7 DAYS') and
-        ${gatewayIdWhere}
+        "gatewayId" = $1
     GROUP BY
         "t"
     ORDER BY 
         "t"
-    `);
+    `, [
+        gatewayId
+    ]);
 
     result.hourly_stats = hourly_stats.rows;
 
@@ -74,12 +74,14 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
         public.raw_pb
     WHERE
         packet_decoded_portnum = 'NODEINFO_APP' and
-        ${gatewayIdWhere}
+        "gatewayId" = $1
 
     order by 
         "packet_from",
         "timestamp" desc
-    `);
+    `, [
+        gatewayId
+    ]);
 
     result.nodeinfo = nodeinfo.rows;
 
@@ -131,12 +133,14 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
             "TELEMETRY_APP_deviceMetrics_airUtilTx" is not null or
             "TELEMETRY_APP_deviceMetrics_channelUtilization" is not null
         ) and
-        ${gatewayIdWhere}
+        "gatewayId" = $1
 
     order by 
         "packet_from",
         "timestamp" desc
-    `);
+    `, [
+        gatewayId
+    ]);
 
     result.telemetry_gen = telemetry_gen.rows;
     decorateNodes(result.telemetry_gen);
@@ -158,12 +162,14 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
             "TELEMETRY_APP_environmentMetrics_relativeHumidity" is not null or
             "TELEMETRY_APP_environmentMetrics_barometricPressure" is not null
         ) and
-        ${gatewayIdWhere}
+        "gatewayId" = $1
 
     order by 
         "packet_from",
         "timestamp" desc
-    `);
+    `, [
+        gatewayId
+    ]);
 
     result.telemetry_env = telemetry_env.rows;
     decorateNodes(result.telemetry_env);
@@ -192,12 +198,14 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
         public.raw_pb
     WHERE
         "timestamp" >= (NOW() - INTERVAL '1 DAYS') and
-        ${gatewayIdWhere}
+        "gatewayId" = $1
     GROUP BY
         "packet_from"
     ORDER BY 
         "count" desc
-    `);
+    `, [
+        gatewayId
+    ]);
 
     result.sender_stats = sender_stats.rows;
     decorateNodes(result.sender_stats);
@@ -225,12 +233,14 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
         public.raw_pb
     WHERE
         "timestamp" >= (NOW() - INTERVAL '1 DAYS') and
-        ${gatewayIdWhere}
+        "gatewayId" = $1
     GROUP BY
         "packet_to"
     ORDER BY 
         "count" desc
-    `);
+    `, [
+        gatewayId
+    ]);
 
     result.receiver_stats = receiver_stats.rows;
     decorateNodes(result.receiver_stats);
@@ -245,13 +255,15 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
     FROM 
         public.raw_pb
     WHERE
-        ${gatewayIdWhere} and
+        "gatewayId" = $1 and
         packet_decoded_portnum = 'TEXT_MESSAGE_APP'
     ORDER BY 
         "timestamp" desc
 
     limit 100
-    `);
+    `, [
+        gatewayId
+    ]);
 
     result.messages = messages.rows;
     decorateNodes(result.messages);
@@ -276,12 +288,14 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
     WHERE
         packet_decoded_portnum = 'POSITION_APP' and
         "POSITION_APP_latitudeI" is not null and
-        ${gatewayIdWhere}
+        "gatewayId" = $1
 
     order by 
         "packet_from",
         "timestamp" desc
-    `);
+    `, [
+        gatewayId
+    ]);
 
     result.positions = positions.rows;
     decorateNodes(result.positions);
@@ -299,11 +313,13 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
         packet_decoded_portnum = 'TRACEROUTE_APP' and
         "packet_decoded_requestId" is not null and
         "timestamp" >= (NOW() - INTERVAL '1 DAYS') and
-        ${gatewayIdWhere}
+        "gatewayId" = $1
     ORDER BY 
         "packet_from",
         "packet_id"
-    `);
+    `, [
+        gatewayId
+    ]);
 
     for (const route of routes.rows) {
         const r = [];
@@ -358,8 +374,8 @@ router.get("/voltage/:gatewayId/:from", async (req, res, next) => {
     FROM 
         public.raw_pb
     WHERE
-        "packet_from" = ${from} and
-        "gatewayId" = '${gid}' and
+        "packet_from" = $1 and
+        "gatewayId" = $2 and
         "packet_decoded_portnum" = 'TELEMETRY_APP' and
         "TELEMETRY_APP_deviceMetrics_voltage" is not null and
         "timestamp" >= (NOW() - INTERVAL '7 DAYS')
@@ -367,7 +383,10 @@ router.get("/voltage/:gatewayId/:from", async (req, res, next) => {
         "t"
     ORDER BY 
         "t" asc
-    `);
+    `, [
+        from,
+        gid
+    ]);
 
     // END
     await pgc.end();

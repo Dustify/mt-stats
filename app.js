@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import mqtt from "mqtt";
+import { rateLimit } from "express-rate-limit";
 
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
@@ -25,7 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 const rateLimitMinutes = 10;
 const rps = 10;
 
-const rateLimit = require('express-rate-limit');
 const limiter = rateLimit({
     windowMs: rateLimitMinutes * 60 * 1000,
     max: rateLimitMinutes * 60 * rps

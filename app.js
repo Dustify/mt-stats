@@ -22,6 +22,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const rateLimitMinutes = 10;
+const rps = 10;
+
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+    windowMs: rateLimitMinutes * 60 * 1000,
+    max: rateLimitMinutes * 60 * rps
+});
+
+// apply rate limiter to all requests
+app.use(limiter);
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/data", dataRouter);

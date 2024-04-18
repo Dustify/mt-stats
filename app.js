@@ -47,6 +47,7 @@ import { ServiceEnvelope } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
 import { User, RouteDiscovery, Position, Routing } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/mesh_pb.js"
 import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/telemetry_pb.js";
 import { AdminMessage } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/admin_pb.js";
+import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/storeforward_pb.js";
 
 (async function () {
     const pgc = getPgClient();
@@ -62,6 +63,8 @@ import { AdminMessage } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/a
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_beginEditSettings" boolean`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "RANGE_TEST_APP_value" character varying(128)`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "packet_channel" bigint`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "STORE_FORWARD_APP_rr" character varying(1024)`,        
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "STORE_FORWARD_APP_heartbeat_period" bigint`,
     ];
 
     for (const sql_update of sql_updates) {
@@ -109,6 +112,7 @@ import { AdminMessage } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/a
                     "TEXT_MESSAGE_APP": { fromBinary: s => s.toString() },
                     "ADMIN_APP": AdminMessage,
                     "RANGE_TEST_APP": { fromBinary: s => s.toString() },
+                    "STORE_FORWARD_APP": StoreAndForward
                 };
 
                 const type = row.packet_decoded_portnum;

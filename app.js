@@ -66,16 +66,17 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "STORE_FORWARD_APP_rr" character varying(1024)`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "STORE_FORWARD_APP_heartbeat_period" bigint`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_deviceMetrics_uptimeSeconds" bigint`,
+        `update public.raw_pb set "TELEMETRY_APP_deviceMetrics_airUtilTx" = null where "TELEMETRY_APP_deviceMetrics_airUtilTx" > 100`,
     ];
 
     for (const sql_update of sql_updates) {
         try {
-            console.log("Executing SQL schema update: " + sql_update);
+            console.log("Executing SQL update: " + sql_update);
             await pgc.query(sql_update);
-            console.log("> Schema update complete");
+            console.log("> Update complete");
         }
         catch (error) {
-            console.log("> WARNING: Schema update failed");
+            console.log("> WARNING: Update failed");
         }
     }
 
@@ -134,6 +135,13 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
 
                         if (type === "TRACEROUTE_APP") {
                             v.route = JSON.stringify(v.route);
+                        }
+
+                        if (type === "TELEMETRY_APP") {
+                            if (v.deviceMetrics.airUtilTx > 100) {
+                                console.log("airUtilTx > 100, setting null");
+                                v.deviceMetrics.airUtilTx = null;
+                            }
                         }
 
                         processObject(v, type + "_", result);

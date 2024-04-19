@@ -349,6 +349,7 @@ const render = async () => {
             "from_shortname",
             "from_longname",
             "count",
+
             "c_text",
             "c_nodeinfo",
             "c_nodeinfo_wr",
@@ -356,6 +357,8 @@ const render = async () => {
             "c_position",
             "c_position_wr",
             "c_range",
+            "c_storeforward",
+
             "d_text",
             "d_nodeinfo",
             "d_nodeinfo_wr",
@@ -364,18 +367,21 @@ const render = async () => {
             "d_routing",
             "d_tr",
             "d_tr_wr",
+            "d_storeforward",
+
             "admin"
         ],
         mh: [
             { t: "", c: 4 },
-            { t: "Channel", c: 7 },
-            { t: "Direct", c: 8 },
+            { t: "Channel", c: 8 },
+            { t: "Direct", c: 9 },
         ],
         cn: [
             "From",
             "SName",
             "LName",
             "Count",
+            
             "Text",
             "NI",
             "NI (WR)",
@@ -383,6 +389,8 @@ const render = async () => {
             "Pos.",
             "Pos. (WR)",
             "Range",
+            "SF",
+
             "Text",
             "NI",
             "NI (WR)",
@@ -391,6 +399,8 @@ const render = async () => {
             "Routing",
             "Trace",
             "Trace (WR)",
+            "SF",
+
             "Admin"
         ],
         sum: [
@@ -402,6 +412,8 @@ const render = async () => {
             "c_position",
             "c_position_wr",
             "c_range",
+            "c_storeforward",
+
             "d_text",
             "d_nodeinfo",
             "d_nodeinfo_wr",
@@ -410,6 +422,8 @@ const render = async () => {
             "d_routing",
             "d_tr",
             "d_tr_wr",
+            "d_storeforward",
+
             "admin"
         ]
     });
@@ -422,6 +436,7 @@ const render = async () => {
             "to_shortname",
             "to_longname",
             "count",
+
             "c_text",
             "c_nodeinfo",
             "c_nodeinfo_wr",
@@ -429,6 +444,8 @@ const render = async () => {
             "c_position",
             "c_position_wr",
             "c_range",
+            "c_storeforward",
+
             "d_text",
             "d_nodeinfo",
             "d_nodeinfo_wr",
@@ -436,18 +453,20 @@ const render = async () => {
             "d_position_wr",
             "d_routing",
             "d_tr",
-            "d_tr_wr"
+            "d_tr_wr",
+            "d_storeforward",
         ],
         mh: [
             { t: "", c: 4 },
-            { t: "Channel", c: 7 },
-            { t: "Direct", c: 8 },
+            { t: "Channel", c: 8 },
+            { t: "Direct", c: 9 },
         ],
         cn: [
             "To",
             "SName",
             "LName",
             "Count",
+
             "Text",
             "NI",
             "NI (WR)",
@@ -455,6 +474,8 @@ const render = async () => {
             "Pos.",
             "Pos. (WR)",
             "Range",
+            "SF",
+
             "Text",
             "NI",
             "NI (WR)",
@@ -463,9 +484,11 @@ const render = async () => {
             "Routing",
             "Trace",
             "Trace (WR)",
+            "SF"
         ],
         sum: [
             "count",
+
             "c_text",
             "c_nodeinfo",
             "c_nodeinfo_wr",
@@ -473,6 +496,8 @@ const render = async () => {
             "c_position",
             "c_position_wr",
             "c_range",
+            "c_storeforward",
+
             "d_text",
             "d_nodeinfo",
             "d_nodeinfo_wr",
@@ -480,7 +505,8 @@ const render = async () => {
             "d_position_wr",
             "d_routing",
             "d_tr",
-            "d_tr_wr"
+            "d_tr_wr",
+            "d_storeforward",
         ]
     });
 

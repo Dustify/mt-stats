@@ -188,6 +188,8 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
 	 	count(*) filter (where packet_to = 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'POSITION_APP') AS "c_position",
 	 	count(*) filter (where packet_to = 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'POSITION_APP') AS "c_position_wr",
         count(*) filter (where packet_to = 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'RANGE_TEST_APP') AS "c_range",
+        count(*) filter (where packet_to = 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'STORE_FORWARD_APP') AS "c_storeforward",
+
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'TEXT_MESSAGE_APP') AS "d_text",
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'NODEINFO_APP') AS "d_nodeinfo",
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'NODEINFO_APP') AS "d_nodeinfo_wr",
@@ -196,6 +198,8 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'ROUTING_APP') AS "d_routing",
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'TRACEROUTE_APP') AS "d_tr",
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'TRACEROUTE_APP') AS "d_tr_wr",
+        count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'STORE_FORWARD_APP') AS "d_storeforward",
+
         count(*) filter (where packet_decoded_portnum = 'ADMIN_APP') AS "admin"
     FROM 
         public.raw_pb
@@ -224,6 +228,8 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
 	 	count(*) filter (where packet_to = 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'POSITION_APP') AS "c_position",
 	 	count(*) filter (where packet_to = 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'POSITION_APP') AS "c_position_wr",
         count(*) filter (where packet_to = 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'RANGE_TEST_APP') AS "c_range",
+        count(*) filter (where packet_to = 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'STORE_FORWARD_APP') AS "c_storeforward",
+
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'TEXT_MESSAGE_APP') AS "d_text",
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'NODEINFO_APP') AS "d_nodeinfo",
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'NODEINFO_APP') AS "d_nodeinfo_wr",
@@ -231,7 +237,9 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'POSITION_APP') AS "d_position_wr",
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'ROUTING_APP') AS "d_routing",
 	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'TRACEROUTE_APP') AS "d_tr",
-	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'TRACEROUTE_APP') AS "d_tr_wr"
+	 	count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" = true and packet_decoded_portnum = 'TRACEROUTE_APP') AS "d_tr_wr",
+        count(*) filter (where packet_to != 4294967295 and "packet_decoded_wantResponse" is null and packet_decoded_portnum = 'STORE_FORWARD_APP') AS "d_storeforward"
+
     FROM 
         public.raw_pb
     WHERE

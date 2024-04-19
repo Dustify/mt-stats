@@ -495,7 +495,8 @@ const render = async () => {
             "airUtilTx",
             "channelUtilization",
             "batteryLevel",
-            "voltage"
+            "voltage",
+            "uptimeSeconds"
         ],
         dp: [
             "airUtilTx",

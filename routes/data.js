@@ -122,7 +122,8 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
     	"TELEMETRY_APP_deviceMetrics_batteryLevel" as "batteryLevel",
 		"TELEMETRY_APP_deviceMetrics_voltage" as "voltage",
 		"TELEMETRY_APP_deviceMetrics_airUtilTx" as "airUtilTx",
-		"TELEMETRY_APP_deviceMetrics_channelUtilization" as "channelUtilization"
+		"TELEMETRY_APP_deviceMetrics_channelUtilization" as "channelUtilization",
+        "TELEMETRY_APP_deviceMetrics_uptimeSeconds" as "uptimeSeconds"
     FROM 
         public.raw_pb
     WHERE
@@ -131,7 +132,8 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
             "TELEMETRY_APP_deviceMetrics_batteryLevel" is not null or
             "TELEMETRY_APP_deviceMetrics_voltage" is not null or
             "TELEMETRY_APP_deviceMetrics_airUtilTx" is not null or
-            "TELEMETRY_APP_deviceMetrics_channelUtilization" is not null
+            "TELEMETRY_APP_deviceMetrics_channelUtilization" is not null or
+            "TELEMETRY_APP_deviceMetrics_uptimeSeconds" is not null
         ) and
         "gatewayId" = $1
 

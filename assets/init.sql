@@ -5,7 +5,7 @@
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
 -- Dumped by pg_dump version 16.2 (Ubuntu 16.2-1.pgdg22.04+1)
 
--- Started on 2024-04-18 21:19:33 BST
+-- Started on 2024-04-19 11:13:28 BST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -122,7 +122,8 @@ CREATE TABLE public.raw_pb (
     "RANGE_TEST_APP_value" character varying(128),
     packet_channel bigint,
     "STORE_FORWARD_APP_rr" character varying(1024),
-    "STORE_FORWARD_APP_heartbeat_period" bigint
+    "STORE_FORWARD_APP_heartbeat_period" bigint,
+    "TELEMETRY_APP_deviceMetrics_uptimeSeconds" bigint
 );
 
 
@@ -170,7 +171,7 @@ ALTER TABLE ONLY public.raw_pb
     ADD CONSTRAINT raw_pb_pkey PRIMARY KEY (id);
 
 
--- Completed on 2024-04-18 21:19:34 BST
+-- Completed on 2024-04-19 11:13:28 BST
 
 --
 -- PostgreSQL database dump complete

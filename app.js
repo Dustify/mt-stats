@@ -139,7 +139,7 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
                         }
 
                         if (type === "TELEMETRY_APP") {
-                            if (v.deviceMetrics.airUtilTx > 100) {
+                            if (v?.deviceMetrics?.airUtilTx && v.deviceMetrics.airUtilTx > 100) {
                                 console.log("airUtilTx > 100, setting null");
                                 v.deviceMetrics.airUtilTx = null;
                             }

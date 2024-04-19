@@ -5,7 +5,7 @@
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
 -- Dumped by pg_dump version 16.2 (Ubuntu 16.2-1.pgdg22.04+1)
 
--- Started on 2024-04-19 11:13:28 BST
+-- Started on 2024-04-19 11:23:21 BST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -146,7 +146,7 @@ CREATE SEQUENCE public.raw_pb_id_seq
 ALTER SEQUENCE public.raw_pb_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3358 (class 0 OID 0)
+-- TOC entry 3359 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: raw_pb_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -163,7 +163,7 @@ ALTER TABLE ONLY public.raw_pb ALTER COLUMN id SET DEFAULT nextval('public.raw_p
 
 
 --
--- TOC entry 3209 (class 2606 OID 16397)
+-- TOC entry 3210 (class 2606 OID 16397)
 -- Name: raw_pb raw_pb_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -171,7 +171,15 @@ ALTER TABLE ONLY public.raw_pb
     ADD CONSTRAINT raw_pb_pkey PRIMARY KEY (id);
 
 
--- Completed on 2024-04-19 11:13:28 BST
+--
+-- TOC entry 3208 (class 1259 OID 33076)
+-- Name: raw_pb_gateway_timestamp_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX raw_pb_gateway_timestamp_idx ON public.raw_pb USING btree ("gatewayId", "timestamp");
+
+
+-- Completed on 2024-04-19 11:23:21 BST
 
 --
 -- PostgreSQL database dump complete

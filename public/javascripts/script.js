@@ -516,7 +516,8 @@ const render = async () => {
             "from_longname",
             "barometricPressure",
             "relativeHumidity",
-            "temperature"
+            "temperature",
+            "gasResistance"
         ],
         dp: [
             "barometricPressure",

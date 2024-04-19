@@ -154,7 +154,8 @@ router.get("/stats_pb/:gatewayId", async (req, res, next) => {
         "packet_from",
         "TELEMETRY_APP_environmentMetrics_temperature" as "temperature",
 		"TELEMETRY_APP_environmentMetrics_relativeHumidity" as "relativeHumidity",
-		"TELEMETRY_APP_environmentMetrics_barometricPressure" as "barometricPressure"
+		"TELEMETRY_APP_environmentMetrics_barometricPressure" as "barometricPressure",
+        "TELEMETRY_APP_environmentMetrics_gasResistance" as "gasResistance"
     FROM 
         public.raw_pb
     WHERE

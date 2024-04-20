@@ -102,23 +102,53 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
         }
     };
 
+    const map = {
+        "NODEINFO_APP": User,
+        "TRACEROUTE_APP": RouteDiscovery,
+        "POSITION_APP": Position,
+        "TELEMETRY_APP": Telemetry,
+        "ROUTING_APP": Routing,
+        "TEXT_MESSAGE_APP": { fromBinary: s => s.toString() },
+        "ADMIN_APP": AdminMessage,
+        "RANGE_TEST_APP": { fromBinary: s => s.toString() },
+        "STORE_FORWARD_APP": StoreAndForward
+    };
+
+    const extractPayload = (result, type, row) => {
+        const payload = Buffer.from(row.packet_decoded_payload, 'base64');
+        let v = map[type].fromBinary(payload);
+
+        if (v instanceof Object) {
+            v = v.toJson();
+
+            if (type === "TRACEROUTE_APP") {
+                v.route = JSON.stringify(v.route);
+            }
+
+            if (type === "TELEMETRY_APP") {
+                if (v?.deviceMetrics?.airUtilTx && v.deviceMetrics.airUtilTx > 100) {
+                    console.log("airUtilTx > 100, setting null");
+                    v.deviceMetrics.airUtilTx = null;
+                }
+            }
+
+            processObject(v, type + "_", result);
+        } else {
+            const t = typeof v;
+
+            if (t === "string") {
+                v = v.replaceAll("'", "''");
+
+                result.push({ key: `${type}_value`, value: `'${v}'` });
+            }
+        }
+    };
+
     const extract = async () => {
         const rows = (await pgc.query(`select id, packet_decoded_portnum, packet_decoded_payload from raw_pb where expanded = true and extracted = false`)).rows;
 
         for (const row of rows) {
             try {
-                const map = {
-                    "NODEINFO_APP": User,
-                    "TRACEROUTE_APP": RouteDiscovery,
-                    "POSITION_APP": Position,
-                    "TELEMETRY_APP": Telemetry,
-                    "ROUTING_APP": Routing,
-                    "TEXT_MESSAGE_APP": { fromBinary: s => s.toString() },
-                    "ADMIN_APP": AdminMessage,
-                    "RANGE_TEST_APP": { fromBinary: s => s.toString() },
-                    "STORE_FORWARD_APP": StoreAndForward
-                };
-
                 const type = row.packet_decoded_portnum;
 
                 if (!map[type]) {
@@ -129,33 +159,7 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
                 const result = [{ key: "extracted", value: true }];
 
                 if (row.packet_decoded_payload) {
-                    const payload = Buffer.from(row.packet_decoded_payload, 'base64');
-                    let v = map[type].fromBinary(payload);
-
-                    if (v instanceof Object) {
-                        v = v.toJson();
-
-                        if (type === "TRACEROUTE_APP") {
-                            v.route = JSON.stringify(v.route);
-                        }
-
-                        if (type === "TELEMETRY_APP") {
-                            if (v?.deviceMetrics?.airUtilTx && v.deviceMetrics.airUtilTx > 100) {
-                                console.log("airUtilTx > 100, setting null");
-                                v.deviceMetrics.airUtilTx = null;
-                            }
-                        }
-
-                        processObject(v, type + "_", result);
-                    } else {
-                        const t = typeof v;
-
-                        if (t === "string") {
-                            v = v.replaceAll("'", "''");
-
-                            result.push({ key: `${type}_value`, value: `'${v}'` });
-                        }
-                    }
+                    extractPayload(result, type, row);
                 }
 
                 const update = result.map(x => `"${x.key}"=${x.value}`).join(",");
@@ -164,8 +168,7 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
                     await pgc.query(`update raw_pb set ${update} where id = ${row.id}`);
                 }
                 catch (error) {
-                    const col = /.*column "(.*?)".*/.exec(error?.message)[1] || "";
-                    console.log(error.message, col, result.find(x => x.key === col).value);
+                    console.log(error.message);
                 }
             }
             catch (err) {

@@ -92,7 +92,7 @@ const render = async () => {
         }
 
         // SQ doesn't like this - justified as chart.js has to be used this way
-        new Chart(document.getElementById(first.name), {
+        new Chart(document.getElementById(first.name), { // NOSONAR
             type: req.type || 'line',
             data: {
                 labels: req.x_axis || x_axis,
@@ -265,24 +265,10 @@ const render = async () => {
     sortTimestampDesc(data.positions);
     sortTimestampDesc(data.routes);
 
-    const create_table = (req) => {
-
-        let html = "<div>";
-        html += `<h3>${req.t}</h3>`;
-        html += `<table class="table table-bordered"><thead><tr>`;
-
-        let sums = {};
-
-        if (req.mh) {
-            for (const mh of req.mh) {
-                html += `<th colspan="${mh.c}">${mh.t}</th>`;
-            }
-
-            html += "</tr><tr>";
-        }
+    const create_table_headers = (req, html, sums) => {
 
         for (const [i, c] of req.c.entries()) {
-            let result = (req.cn && req.cn[i]) || c;
+            let result = req.cn?.[i] || c;
 
             if (req.sum && req.sum.indexOf(c) > -1) {
                 let sum = 0;
@@ -299,41 +285,74 @@ const render = async () => {
             html += `<th scope="col">${result}</th>`;
         }
 
+        return html;
+    };
+
+    const create_table_row = (req, html, sums, d, c) => {
+        let v = d[c] || "";
+
+        if (c === "timestamp") {
+            v = new Date(v).toString().substring(0, 24);
+        }
+
+        if (req.dp && req.dp.indexOf(c) > -1) {
+            v = parseFloat(v || 0).toFixed(2);
+        }
+
+        if (c === "latitude" || c === "longitude") {
+            v = parseFloat(v || 0).toFixed(7);
+        }
+
+        if (v && sums[c]) {
+            const pct = (v / sums[c] * 100).toFixed(2);
+
+            v += `<br />${pct}%`;
+        }
+
+        html += `<td>${v}</td>`;
+
+        return html;
+    }
+
+    const create_table_rows = (req, html, sums) => {
+        for (const d of req.d) {
+            html += `<tr>`;
+
+            for (const c of req.c) {
+                html = create_table_row(req, html, sums, d, c);
+            }
+
+            html += `</tr>`;
+        }
+
+        return html;
+    }
+
+    const create_table = (req) => {
+
+        let html = "<div>";
+        html += `<h3>${req.t}</h3>`;
+        html += `<table class="table table-bordered"><thead><tr>`;
+
+        let sums = {};
+
+        if (req.mh) {
+            for (const mh of req.mh) {
+                html += `<th colspan="${mh.c}">${mh.t}</th>`;
+            }
+
+            html += "</tr><tr>";
+        }
+
+        html = create_table_headers(req, html, sums);
+
         // header
 
         html += "</tr></thead><tbody>";
 
         // body
 
-        for (const d of req.d) {
-            html += `<tr>`;
-
-            for (const c of req.c) {
-                let v = d[c] || "";
-
-                if (c === "timestamp") {
-                    v = new Date(v).toString().substring(0, 24);
-                }
-
-                if (req.dp && req.dp.indexOf(c) > -1) {
-                    v = parseFloat(v || 0).toFixed(2);
-                }
-
-                if (c === "latitude" || c === "longitude") {
-                    v = parseFloat(v || 0).toFixed(7);
-                }
-
-                if (v && sums[c]) {
-                    const pct = (v / sums[c] * 100).toFixed(2);
-
-                    v += `<br />${pct}%`;
-                }
-
-                html += `<td>${v}</td>`;
-            }
-
-            html += `</tr>`;
-        }
+        html = create_table_rows(req, html, sums);
 
         html += "</tbody></table></div>";
 
@@ -381,7 +400,7 @@ const render = async () => {
             "SName",
             "LName",
             "Count",
-            
+
             "Text",
             "NI",
             "NI (WR)",

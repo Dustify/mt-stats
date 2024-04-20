@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./src/bin/www"
   },
   "dependencies": {
     "@buf/meshtastic_protobufs.bufbuild_es": "^1.8.0-20240411120154-019267fa4cc6.2",

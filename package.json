@@ -7,7 +7,7 @@
     "start": "node ./src/bin/www"
   },
   "dependencies": {
-    "@buf/meshtastic_protobufs.bufbuild_es": "^1.8.0-20240411120154-019267fa4cc6.2",
+    "@buf/meshtastic_protobufs.bufbuild_es": "^1.9.0-20240423181507-09cd4959de0a.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.19.2",

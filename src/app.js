@@ -69,7 +69,9 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
         `update public.raw_pb set "TELEMETRY_APP_deviceMetrics_airUtilTx" = null where "TELEMETRY_APP_deviceMetrics_airUtilTx" > 100`,
         `CREATE INDEX IF NOT EXISTS raw_pb_gateway_timestamp_idx on raw_pb ("gatewayId", "timestamp")`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_gasResistance" numeric`,
-        // "update public.raw_pb set expanded = false, extracted = false where packet_decoded_portnum = '17'",
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_iaq" numeric`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_powerMetrics_ch3Current" numeric`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_powerMetrics_ch3Voltage" numeric`,
     ];
 
     for (const sql_update of sql_updates) {

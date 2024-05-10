@@ -3,9 +3,9 @@
 --
 
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
--- Dumped by pg_dump version 16.2 (Ubuntu 16.2-1.pgdg22.04+1)
+-- Dumped by pg_dump version 16.3 (Ubuntu 16.3-1.pgdg22.04+1)
 
--- Started on 2024-04-19 23:53:11 BST
+-- Started on 2024-05-10 14:56:51 BST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -124,7 +124,10 @@ CREATE TABLE public.raw_pb (
     "STORE_FORWARD_APP_rr" character varying(1024),
     "STORE_FORWARD_APP_heartbeat_period" bigint,
     "TELEMETRY_APP_deviceMetrics_uptimeSeconds" bigint,
-    "TELEMETRY_APP_environmentMetrics_gasResistance" numeric
+    "TELEMETRY_APP_environmentMetrics_gasResistance" numeric,
+    "TELEMETRY_APP_environmentMetrics_iaq" numeric,
+    "TELEMETRY_APP_powerMetrics_ch3Current" numeric,
+    "TELEMETRY_APP_powerMetrics_ch3Voltage" numeric
 );
 
 
@@ -173,14 +176,14 @@ ALTER TABLE ONLY public.raw_pb
 
 
 --
--- TOC entry 3208 (class 1259 OID 33076)
+-- TOC entry 3208 (class 1259 OID 16398)
 -- Name: raw_pb_gateway_timestamp_idx; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE INDEX raw_pb_gateway_timestamp_idx ON public.raw_pb USING btree ("gatewayId", "timestamp");
 
 
--- Completed on 2024-04-19 23:53:11 BST
+-- Completed on 2024-05-10 14:56:51 BST
 
 --
 -- PostgreSQL database dump complete

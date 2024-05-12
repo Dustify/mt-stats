@@ -72,6 +72,9 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_iaq" numeric`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_powerMetrics_ch3Current" numeric`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_powerMetrics_ch3Voltage" numeric`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_altitudeHae" numeric`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_distance" numeric`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "STORE_FORWARD_APP_text" character varying(1024)`,
     ];
 
     for (const sql_update of sql_updates) {
@@ -195,10 +198,15 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
 
                 log(p.packet.decoded.portnum, p.packet.from, p.packet.to);
 
+                
+
                 const result = [
-                    { key: "expanded", value: true },
-                    { key: "timestamp", value: `'${new Date(p.packet.rxTime * 1000).toISOString()}'` }
+                    { key: "expanded", value: true }
                 ];
+
+                if (p.packet.rxTime) {
+                    result.push({ key: "timestamp", value: `'${new Date(p.packet.rxTime * 1000).toISOString()}'` });
+                }
 
                 processObject(p, "", result);
 

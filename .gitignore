@@ -2,3 +2,6 @@ node_modules
 local.env
 sonar.sh
 .scannerwork
+dist
+.nx/cache
+bundle.js

@@ -1,0 +1,22 @@
+{
+  "name": "mt-stats-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/server/index.js",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "tsc && webpack",
+    "start": "node dist/server/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mt-stats-lib": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

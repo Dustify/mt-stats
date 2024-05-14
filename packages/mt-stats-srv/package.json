@@ -1,0 +1,14 @@
+{
+  "name": "mt-stats-srv",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mt-stats-lib": "^1.0.0"
+  }
+}

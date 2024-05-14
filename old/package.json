@@ -1,0 +1,19 @@
+{
+  "name": "mt-stats",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ./src/bin/www"
+  },
+  "dependencies": {
+    "@buf/meshtastic_protobufs.bufbuild_es": "^1.9.0-20240509131159-87632a21b69a.1",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.19.2",
+    "express-rate-limit": "^7.2.0",
+    "morgan": "~1.9.1",
+    "mqtt": "^5.5.0",
+    "pg": "^8.11.3"
+  }
+}

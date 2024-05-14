@@ -1,0 +1,19 @@
+{
+  "targetDefaults": {
+    "build": {
+      "cache": true,
+      "dependsOn": [
+        "clean",
+        "^build"
+      ],
+      "outputs": [
+        "{projectRoot}/dist"
+      ]
+    },
+    "start": {
+      "dependsOn": [
+        "build"
+      ]
+    }
+  }
+}

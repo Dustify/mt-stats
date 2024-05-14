@@ -5,7 +5,7 @@
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
 -- Dumped by pg_dump version 16.3 (Ubuntu 16.3-1.pgdg22.04+1)
 
--- Started on 2024-05-12 15:16:35 BST
+-- Started on 2024-05-14 22:59:19 BST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -130,7 +130,8 @@ CREATE TABLE public.raw_pb (
     "TELEMETRY_APP_powerMetrics_ch3Voltage" numeric,
     "POSITION_APP_altitudeHae" numeric,
     "TELEMETRY_APP_environmentMetrics_distance" numeric,
-    "STORE_FORWARD_APP_text" character varying(1024)
+    "STORE_FORWARD_APP_text" character varying(1024),
+    "POSITION_APP_altitudeGeoidalSeparation" numeric
 );
 
 
@@ -186,7 +187,7 @@ ALTER TABLE ONLY public.raw_pb
 CREATE INDEX raw_pb_gateway_timestamp_idx ON public.raw_pb USING btree ("gatewayId", "timestamp");
 
 
--- Completed on 2024-05-12 15:16:36 BST
+-- Completed on 2024-05-14 22:59:20 BST
 
 --
 -- PostgreSQL database dump complete

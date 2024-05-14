@@ -75,6 +75,7 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_altitudeHae" numeric`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_distance" numeric`,
         `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "STORE_FORWARD_APP_text" character varying(1024)`,
+        `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_altitudeGeoidalSeparation" numeric`,
     ];
 
     for (const sql_update of sql_updates) {

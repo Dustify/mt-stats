@@ -7,7 +7,7 @@ export interface IStorageService {
     GetRawMessages(): Promise<IRawMessage[]>;
 
     StoreUnpackedMessage(message: IUnpackedMessage): Promise<void>;
-    GetUnpackedMessages(): Promise<IUnpackedMessage>;
+    GetUnpackedMessages(): Promise<IUnpackedMessage[]>;
     
     StoreCompleteMessage(message: ICompleteMessage): Promise<void>;
 }

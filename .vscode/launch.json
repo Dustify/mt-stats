@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "start",
+            "name": "start-web",
             "skipFiles": [
                 "<node_internals>/**"
             ],
@@ -15,7 +15,8 @@
             "args": [
                 "lerna",
                 "run",
-                "start"
+                "start",
+                "--scope=mt-stats-web"
             ],
             "envFile": "${workspaceFolder}/local.env"
         },

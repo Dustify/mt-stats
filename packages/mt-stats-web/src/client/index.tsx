@@ -7,9 +7,10 @@ import {
 } from "react-router-dom";
 
 import App from "./components/App.js";
+import { StateService } from "./service/StateService.js";
 
 (async () => {
-// const gateways = await 
+  await StateService.init();
 
   const router = createBrowserRouter([
     {

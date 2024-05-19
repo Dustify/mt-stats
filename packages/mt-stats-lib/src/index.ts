@@ -7,6 +7,7 @@ export * from "./if/IStorageService.js";
 export * from "./model/IRawMessage.js";
 export * from "./model/IUnpackedMessage.js";
 export * from "./model/ICompleteMessage.js";
+export * from "./model/IGateway.js";
 
 // services
 export * from "./service/PostgresStorageService.js";

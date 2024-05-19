@@ -1,8 +1,12 @@
 import { Router } from "express";
+import { IStorageService, PostgresStorageService } from "mt-stats-lib";
 
 export const apiRouter = Router();
 
-apiRouter.get("/gateways", (req, res) => {
-    res.send("shit");
+const storageService: IStorageService = new PostgresStorageService();
+storageService.Connect();
+
+apiRouter.get("/gateways", async (req, res) => {
+    res.send(await storageService.GetGateways());
 });
 

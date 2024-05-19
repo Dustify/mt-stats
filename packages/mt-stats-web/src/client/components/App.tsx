@@ -1,5 +1,6 @@
 import React from "react";
 import { IAppProps } from "../model/IAppProps.js";
+import { StateService } from "../service/StateService.js";
 
 export default (props: IAppProps) => {
   return [
@@ -24,8 +25,9 @@ export default (props: IAppProps) => {
             </ul>
             <form className="d-flex" role="search" style={{ margin: 0 }}>
               <select className="form-select me-2">
-                <option>test</option>
-                <option>test 2</option>
+                {
+                  StateService.Gateways.map(x => <option value={x.Id}>{x.Name}</option>)
+                }
               </select>
             </form>
           </div>

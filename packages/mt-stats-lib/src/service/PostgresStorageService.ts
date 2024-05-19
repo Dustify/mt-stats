@@ -6,6 +6,7 @@ import { IUnpackedMessage } from "../model/IUnpackedMessage.js";
 import { ICompleteMessage } from "../model/ICompleteMessage.js";
 import { ServiceBase } from "./ServiceBase.js";
 import { SchemaUpdates } from "../util/SchemaUpdates.js";
+import { IGateway } from "../model/IGateway.js";
 
 export class PostgresStorageService extends ServiceBase implements IStorageService {
     private Client: pg.Client;
@@ -26,6 +27,65 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
         this.Client = new pg.Client(opts);
 
         this.Info("constructor end");
+    }
+
+    public async GetGateways(): Promise<IGateway[]> {
+        const names: {
+            id: string;
+            short: string;
+            long: string;
+        }[] = (await this.Client.query(`
+            SELECT
+                distinct on ("NODEINFO_APP_id") 
+                "NODEINFO_APP_id" as "id",
+                "NODEINFO_APP_shortName" as "short",
+                "NODEINFO_APP_longName" as "long"
+            FROM 
+                public.raw_pb
+
+            WHERE
+                "NODEINFO_APP_id" is not null
+
+            order by 
+                "NODEINFO_APP_id",
+                "timestamp" desc
+        `)).rows;
+
+        const gws: {
+            gatewayId: string;
+            count: number;
+        }[] = (await this.Client.query(`
+            SELECT
+                distinct ("gatewayId") as "gatewayId",
+                count(*) as "count"
+            FROM 
+                public.raw_pb
+            WHERE
+                "gatewayId" is not null
+            GROUP BY
+                "gatewayId"
+            ORDER BY 
+                "count" desc
+            `)).rows;
+
+        const result: IGateway[] = [];
+
+        for (const gw of gws) {
+            const item: IGateway = {
+                Id: gw.gatewayId,
+                Name: ""
+            };
+
+            const name = names.find(x => x.id === gw.gatewayId);
+
+            if (name) {
+                item.Name = `(${name.short}) ${name.long}`
+            }
+
+            result.push(item);
+        }
+
+        return result;
     }
 
     private GenerateUpdate(source: any): string {

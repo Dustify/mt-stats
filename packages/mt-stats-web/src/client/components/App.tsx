@@ -23,9 +23,6 @@ export default (props: IAppProps) => {
               </li>
             </ul>
             <form className="d-flex" role="search" style={{ margin: 0 }}>
-              {/* <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-success" type="submit">Search</button> */}
-
               <select className="form-select me-2">
                 <option>test</option>
                 <option>test 2</option>
@@ -34,7 +31,7 @@ export default (props: IAppProps) => {
           </div>
         </div>
       </nav>
-    </header >,
+    </header>,
     <main>
 
       <div id="myCarousel" className="carousel slide mb-6" data-bs-ride="carousel">

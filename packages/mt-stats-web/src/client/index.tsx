@@ -9,6 +9,8 @@ import {
 import App from "./components/App.js";
 
 (async () => {
+// const gateways = await 
+
   const router = createBrowserRouter([
     {
       path: "/",

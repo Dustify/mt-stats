@@ -1,0 +1,42 @@
+export const SchemaUpdates: string[] = [
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "NODEINFO_APP_isLicensed" boolean`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "packet_decoded_replyId" bigint`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "packet_decoded_emoji" bigint`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_setOwner_longName" character varying(128)`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_setOwner_shortName" character varying(8)`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "ADMIN_APP_beginEditSettings" boolean`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "RANGE_TEST_APP_value" character varying(128)`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "packet_channel" bigint`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "STORE_FORWARD_APP_rr" character varying(1024)`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "STORE_FORWARD_APP_heartbeat_period" bigint`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_deviceMetrics_uptimeSeconds" bigint`,
+    `update public.raw_pb set "TELEMETRY_APP_deviceMetrics_airUtilTx" = null where "TELEMETRY_APP_deviceMetrics_airUtilTx" > 100`,
+    `CREATE INDEX IF NOT EXISTS raw_pb_gateway_timestamp_idx on raw_pb ("gatewayId", "timestamp")`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_gasResistance" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_iaq" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_powerMetrics_ch3Current" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_powerMetrics_ch3Voltage" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_altitudeHae" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_distance" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "STORE_FORWARD_APP_text" character varying(1024)`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_altitudeGeoidalSeparation" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_locationSource" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_altitudeSource" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_timestampMillisAdjust" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_HDOP" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_VDOP" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_gpsAccuracy" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_fixQuality" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_fixType" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_sensorId" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "POSITION_APP_nextUpdate" numeric`,
+
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_voltage" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_current" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_lux" numeric`,
+    `ALTER TABLE IF EXISTS public.raw_pb ADD COLUMN IF NOT EXISTS "TELEMETRY_APP_environmentMetrics_whiteLux" numeric`,
+
+
+
+
+];

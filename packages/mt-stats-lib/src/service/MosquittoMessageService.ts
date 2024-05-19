@@ -1,7 +1,7 @@
 import mqtt from "mqtt";
-import { IMessageService } from "../if/IMessageService";
-import { IRawMessage } from "../model/IRawMessage";
-import { ServiceBase } from "./ServiceBase";
+import { IMessageService } from "../if/IMessageService.js";
+import { IRawMessage } from "../model/IRawMessage.js";
+import { ServiceBase } from "./ServiceBase.js";
 
 export class MosquittoMessageService extends ServiceBase implements IMessageService {
     private Client: mqtt.MqttClient | null = null;

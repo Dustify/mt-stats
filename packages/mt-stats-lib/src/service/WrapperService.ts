@@ -1,11 +1,11 @@
-import { IMeshService } from "../if/IMeshService";
-import { IMessageService } from "../if/IMessageService";
-import { IStorageService } from "../if/IStorageService";
-import { IRawMessage } from "../model/IRawMessage";
-import { MosquittoMessageService } from "./MosquittoMessageService";
-import { MtMeshService } from "./MtMeshService";
-import { PostgresStorageService } from "./PostgresStorageService";
-import { ServiceBase } from "./ServiceBase";
+import { IMeshService } from "../if/IMeshService.js";
+import { IMessageService } from "../if/IMessageService.js";
+import { IStorageService } from "../if/IStorageService.js";
+import { IRawMessage } from "../model/IRawMessage.js";
+import { MosquittoMessageService } from "./MosquittoMessageService.js";
+import { MtMeshService } from "./MtMeshService.js";
+import { PostgresStorageService } from "./PostgresStorageService.js";
+import { ServiceBase } from "./ServiceBase.js";
 
 export class WrapperService extends ServiceBase {
     messageService: IMessageService = new MosquittoMessageService();
@@ -17,6 +17,11 @@ export class WrapperService extends ServiceBase {
 
         for (const message of messages) {
             const processedMessage = await this.meshService.ProcessRawMessage(message);
+
+            if (!processedMessage) {
+                continue;
+            }
+
             await this.storageService.StoreUnpackedMessage(processedMessage);
         }
     }
@@ -26,6 +31,11 @@ export class WrapperService extends ServiceBase {
 
         for (const message of messages) {
             const processedMessage = await this.meshService.ProcessUnpackedMessage(message);
+
+            if (!processedMessage) {
+                continue;
+            }
+
             await this.storageService.StoreCompleteMessage(processedMessage);
         }
     }
@@ -43,6 +53,6 @@ export class WrapperService extends ServiceBase {
     async init() {
         await this.storageService.Connect();
         await this.processAll();
-        await this.messageService.Connect(this.rawMessageHandler);
+        await this.messageService.Connect(this.rawMessageHandler.bind(this));
     }
 }

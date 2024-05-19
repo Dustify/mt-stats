@@ -1,15 +1,15 @@
 // interfaces
-export * from "./if/IMeshService";
-export * from "./if/IMessageService";
-export * from "./if/IStorageService";
+export * from "./if/IMeshService.js";
+export * from "./if/IMessageService.js";
+export * from "./if/IStorageService.js";
 
 // models
-export * from "./model/IRawMessage";
-export * from "./model/IUnpackedMessage";
-export * from "./model/ICompleteMessage";
+export * from "./model/IRawMessage.js";
+export * from "./model/IUnpackedMessage.js";
+export * from "./model/ICompleteMessage.js";
 
 // services
-export * from "./service/PostgresStorageService";
-export * from "./service/MosquittoMessageService";
-export * from "./service/MtMeshService";
-export * from "./service/WrapperService";
+export * from "./service/PostgresStorageService.js";
+export * from "./service/MosquittoMessageService.js";
+export * from "./service/MtMeshService.js";
+export * from "./service/WrapperService.js";

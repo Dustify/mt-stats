@@ -1,10 +1,11 @@
-import { IStorageService } from "../if/IStorageService";
+import { IStorageService } from "../if/IStorageService.js";
 
 import pg from "pg";
-import { IRawMessage } from "../model/IRawMessage";
-import { IUnpackedMessage } from "../model/IUnpackedMessage";
-import { ICompleteMessage } from "../model/ICompleteMessage";
-import { ServiceBase } from "./ServiceBase";
+import { IRawMessage } from "../model/IRawMessage.js";
+import { IUnpackedMessage } from "../model/IUnpackedMessage.js";
+import { ICompleteMessage } from "../model/ICompleteMessage.js";
+import { ServiceBase } from "./ServiceBase.js";
+import { SchemaUpdates } from "../util/SchemaUpdates.js";
 
 export class PostgresStorageService extends ServiceBase implements IStorageService {
     private Client: pg.Client;
@@ -27,10 +28,43 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
         this.Info("constructor end");
     }
 
+    private GenerateUpdate(source: any): string {
+        const result: string[] = [];
+
+        for (const prop in source) {
+            if (prop === "id") {
+                continue;
+            }
+
+            let value = source[prop];
+
+            if (typeof value === "string") {
+                value = value.replaceAll("'", "''");
+                value = `'${value}'`;
+            }
+
+            result.push(`"${prop}" = ${value}`);
+        }
+
+        return result.join(", ");
+    }
+
     public async Connect(): Promise<void> {
         this.Info("Connect start");
 
-        await this.Client.connect()
+        await this.Client.connect();
+
+
+        for (const sql_update of SchemaUpdates) {
+            try {
+                this.Info("Executing SQL update: " + sql_update);
+                await this.Client.query(sql_update);
+                this.Info("> Update complete");
+            }
+            catch (error) {
+                this.Warn("> WARNING: Update failed", error);
+            }
+        }
 
         this.Info("Connect end");
     }
@@ -57,19 +91,19 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
 
         this.Info("GetRawMessages", `${response.rows.length} rows`)
 
-        const result: IRawMessage[] = [];
-
-        for (const row of response.rows) {
-            result.push(row);
-        }
-
         this.Info("GetRawMessages end");
 
-        return result;
+        return response.rows;
     }
 
     public async StoreUnpackedMessage(message: IUnpackedMessage): Promise<void> {
         this.Info("StoreUnpackedMessage start");
+
+        const updates = this.GenerateUpdate(message);
+
+        const update = `update raw_pb set ${updates} where id = ${message.id}`;
+
+        await this.Client.query(update);
 
         this.Info("StoreUnpackedMessage end");
     }
@@ -81,20 +115,24 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
             `select id, packet_decoded_portnum, packet_decoded_payload from raw_pb where expanded = true and extracted = false`
         );
 
-        const result: IUnpackedMessage[] = [];
-
-        for (const row of response.rows) {
-            debugger
-        }
-
         this.Info("GetUnpackedMessages end");
 
-        return result;
+        return response.rows;
     }
 
     public async StoreCompleteMessage(message: ICompleteMessage): Promise<void> {
         this.Info("StoreCompleteMessage start");
 
-        this.Info("StoreCompleteMessage start");
+        const updates = this.GenerateUpdate(message);
+        const update = `update raw_pb set ${updates} where id = ${message.id}`;
+
+        try {
+            await this.Client.query(update);
+        }
+        catch (error) {
+            this.Error("StoreCompleteMessage error", error);
+        }
+
+        this.Info("StoreCompleteMessage end");
     }
 }

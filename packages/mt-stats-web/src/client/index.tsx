@@ -1,15 +1,27 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
-function NavigationBar() {
-  // TODO: Actually implement a navigation bar
-  return <h1>Hello from React!</h1>;
-}
+import App from './components/App.js';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+]);
 
 const domNode = document.getElementById('app');
 
 if (domNode) {
   const root = createRoot(domNode);
-  root.render(<NavigationBar />);
+  root.render(
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  );
 }

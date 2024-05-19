@@ -2,13 +2,16 @@
   "name": "mt-stats-lib",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "clean": "rm -rf dist",
     "build": "tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@buf/meshtastic_protobufs.bufbuild_es": "^1.9.0-20240516204100-727d33741020.1",
+    "mqtt": "^5.6.1",
     "pg": "^8.11.5"
   },
   "devDependencies": {

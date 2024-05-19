@@ -1,3 +1,5 @@
+#!/bin/sh
+
 sonar-scanner \
   -Dsonar.projectKey=mt-stats \
   -Dsonar.sources=. \

@@ -7,14 +7,31 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "start",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "runtimeExecutable": "npm",
+            "runtimeExecutable": "npx",
             "args": [
+                "lerna",
                 "run",
                 "start"
+            ],
+            "envFile": "${workspaceFolder}/local.env"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "start-srv",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeExecutable": "npx",
+            "args": [
+                "lerna",
+                "run",
+                "start",
+                "--scope=mt-stats-srv"
             ],
             "envFile": "${workspaceFolder}/local.env"
         }

@@ -5,7 +5,7 @@
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
 -- Dumped by pg_dump version 16.3 (Ubuntu 16.3-1.pgdg22.04+1)
 
--- Started on 2024-05-14 22:59:19 BST
+-- Started on 2024-05-20 23:08:29 BST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -131,7 +131,21 @@ CREATE TABLE public.raw_pb (
     "POSITION_APP_altitudeHae" numeric,
     "TELEMETRY_APP_environmentMetrics_distance" numeric,
     "STORE_FORWARD_APP_text" character varying(1024),
-    "POSITION_APP_altitudeGeoidalSeparation" numeric
+    "POSITION_APP_altitudeGeoidalSeparation" numeric,
+    "POSITION_APP_locationSource" numeric,
+    "POSITION_APP_altitudeSource" numeric,
+    "POSITION_APP_timestampMillisAdjust" numeric,
+    "POSITION_APP_HDOP" numeric,
+    "POSITION_APP_VDOP" numeric,
+    "POSITION_APP_gpsAccuracy" numeric,
+    "POSITION_APP_fixQuality" numeric,
+    "POSITION_APP_fixType" numeric,
+    "POSITION_APP_sensorId" numeric,
+    "POSITION_APP_nextUpdate" numeric,
+    "TELEMETRY_APP_environmentMetrics_voltage" numeric,
+    "TELEMETRY_APP_environmentMetrics_current" numeric,
+    "TELEMETRY_APP_environmentMetrics_lux" numeric,
+    "TELEMETRY_APP_environmentMetrics_whiteLux" numeric
 );
 
 
@@ -187,7 +201,7 @@ ALTER TABLE ONLY public.raw_pb
 CREATE INDEX raw_pb_gateway_timestamp_idx ON public.raw_pb USING btree ("gatewayId", "timestamp");
 
 
--- Completed on 2024-05-14 22:59:20 BST
+-- Completed on 2024-05-20 23:08:30 BST
 
 --
 -- PostgreSQL database dump complete

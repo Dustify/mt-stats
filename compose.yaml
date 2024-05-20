@@ -1,9 +1,25 @@
 services:
   web:
-    build: .
+    build:
+      context: ./
+      target: mt-stats-web
     restart: always
     ports: 
       - "3123:3000" # change 3123 to another port if needed 
+    depends_on:
+      - db
+    environment:
+      POSTGRES_ADDRESS: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mt
+  
+  srv:
+    build:
+      context: ./
+      target: mt-stats-web
+    restart: always
     depends_on:
       - db
       - mqtt
@@ -15,6 +31,7 @@ services:
       POSTGRES_DB: mt
       MQTT_ADDRESS: mqtt://mqtt
       MQTT_CLIENTID: mt-stats
+
   db:
     image: postgres:16
     restart: always

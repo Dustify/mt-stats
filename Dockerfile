@@ -4,11 +4,11 @@ USER node
 
 WORKDIR /app
 
-ADD package-lock.json .
-ADD package.json .
-ADD packages/ ./packages
-ADD nx.json .
-ADD lerna.json .
+ADD --chown=node:node package-lock.json .
+ADD --chown=node:node package.json .
+ADD --chown=node:node packages/ ./packages
+ADD --chown=node:node nx.json .
+ADD --chown=node:node lerna.json .
 
 RUN npm config set @buf:registry https://buf.build/gen/npm/v1/
 

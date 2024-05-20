@@ -149,9 +149,7 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
             "select data, id from raw_pb where expanded = false limit 1000"
         );
 
-        this.Info("GetRawMessages", `${response.rows.length} rows`)
-
-        this.Info("GetRawMessages end");
+        this.Info("GetRawMessages end", `${response.rows.length} rows`);
 
         return response.rows;
     }
@@ -175,7 +173,7 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
             `select id, packet_decoded_portnum, packet_decoded_payload from raw_pb where expanded = true and extracted = false limit 1000`
         );
 
-        this.Info("GetUnpackedMessages end");
+        this.Info("GetUnpackedMessages end", `${response.rows.length} rows`);
 
         return response.rows;
     }

@@ -184,7 +184,15 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
         }
     };
 
+    let isProcessing = false;
+
     const expand = async () => {
+        if (isProcessing) {
+            log("Already processing");
+            return;
+        }
+
+        isProcessing = true;
         const rows = (await pgc.query(`select data, id from raw_pb where expanded = false`)).rows;
 
         for (const row of rows) {
@@ -199,7 +207,7 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
 
                 log(p.packet.decoded.portnum, p.packet.from, p.packet.to);
 
-                
+
 
                 const result = [
                     { key: "expanded", value: true }
@@ -221,6 +229,8 @@ import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtasti
         }
 
         await extract();
+
+        isProcessing = false;
     };
 
     await expand();

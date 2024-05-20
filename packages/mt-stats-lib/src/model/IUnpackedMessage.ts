@@ -14,4 +14,5 @@ export interface IUnpackedMessage extends IRawMessage {
     "channelId": string;
     "gatewayId": string;
     "expanded": boolean;
+    "timestamp": string;
 }

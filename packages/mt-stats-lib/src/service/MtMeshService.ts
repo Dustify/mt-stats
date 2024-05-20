@@ -1,4 +1,9 @@
 import { Position, RouteDiscovery, Routing, User } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/mesh_pb.js";
+import { ServiceEnvelope } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/mqtt_pb.js";
+import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/telemetry_pb.js";
+import { AdminMessage } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/admin_pb.js";
+import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/storeforward_pb.js";
+
 import { IMeshService } from "../if/IMeshService.js";
 import { ICompleteMessage } from "../model/ICompleteMessage.js";
 import { IRawMessage } from "../model/IRawMessage.js";
@@ -6,12 +11,6 @@ import { IServiceEnvelope } from "../model/IServiceEnvelope.js";
 import { IUnpackedMessage } from "../model/IUnpackedMessage.js";
 import { Flatten } from "../util/Flatten.js";
 import { ServiceBase } from "./ServiceBase.js";
-
-import { ServiceEnvelope } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/mqtt_pb.js";
-import { Telemetry } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/telemetry_pb.js";
-
-import { AdminMessage } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/admin_pb.js";
-import { StoreAndForward } from "@buf/meshtastic_protobufs.bufbuild_es/meshtastic/storeforward_pb.js";
 
 export class MtMeshService extends ServiceBase implements IMeshService {
     async ProcessRawMessage(message: IRawMessage): Promise<IUnpackedMessage | undefined> {
@@ -41,7 +40,11 @@ export class MtMeshService extends ServiceBase implements IMeshService {
             expanded: true
         };
 
-        this.Info("ProcessRawMessage end");
+        if (result.packet_rxTime) {
+            result.timestamp = new Date(result.packet_rxTime * 1000).toISOString();
+        }
+
+        this.Info("ProcessRawMessage end", result.timestamp, result.packet_from, result.packet_to, result.packet_decoded_portnum);
 
         return result;
     }
@@ -122,7 +125,7 @@ export class MtMeshService extends ServiceBase implements IMeshService {
             }
         }
 
-        this.Info("ProcessUnpackedMessage end");
+        this.Info("ProcessUnpackedMessage end", result.packet_decoded_portnum);
 
         return result;
     }

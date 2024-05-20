@@ -146,7 +146,7 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
         this.Info("GetRawMessages start");
 
         const response = await this.Client.query(
-            "select data, id from raw_pb where expanded = false"
+            "select data, id from raw_pb where expanded = false limit 1000"
         );
 
         this.Info("GetRawMessages", `${response.rows.length} rows`)
@@ -157,7 +157,7 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
     }
 
     public async StoreUnpackedMessage(message: IUnpackedMessage): Promise<void> {
-        this.Info("StoreUnpackedMessage start");
+        this.Info("StoreUnpackedMessage start", message.timestamp, message.packet_from, message.packet_to, message.packet_decoded_portnum);
 
         const updates = this.GenerateUpdate(message);
 
@@ -172,7 +172,7 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
         this.Info("GetUnpackedMessages start");
 
         const response = await this.Client.query(
-            `select id, packet_decoded_portnum, packet_decoded_payload from raw_pb where expanded = true and extracted = false`
+            `select id, packet_decoded_portnum, packet_decoded_payload from raw_pb where expanded = true and extracted = false limit 1000`
         );
 
         this.Info("GetUnpackedMessages end");

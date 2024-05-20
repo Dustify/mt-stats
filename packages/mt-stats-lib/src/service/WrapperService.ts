@@ -40,19 +40,31 @@ export class WrapperService extends ServiceBase {
         }
     }
 
+    processing = false;
+
     async processAll() {
+        if (this.processing) {
+            this.Info("processAll", "Already processing");
+            return;
+        }
+
+        this.processing = true;
+
         await this.processRawMessages();
         await this.processUnpackedMessages();
+
+        this.processing = false;
     }
 
     async rawMessageHandler(topic: string, message: IRawMessage) {
         await this.storageService.StoreRawMessage(message);
-        await this.processAll();
     }
 
     async init() {
         await this.storageService.Connect();
         await this.processAll();
         await this.messageService.Connect(this.rawMessageHandler.bind(this));
+
+        setInterval(this.processAll.bind(this), 1000);
     }
 }

@@ -1,10 +1,30 @@
-import React from "react";
-import { IAppProps } from "../model/IAppProps.js";
+import React, { ChangeEvent } from "react";
 import { StateService } from "../service/StateService.js";
 
-export default (props: IAppProps) => {
+export default () => {
+  const path = window.location.pathname.split("/").filter(x => x);
+
+  if (!path.length || !path[0]) {
+    const defaultGatewayId = StateService.Gateways[0].Id;
+
+    window.location.href = `/${defaultGatewayId}/signal`;
+    return;
+  }
+
+  if (!path[1]) {
+    window.location.href = `/${path[0]}/signal`;
+    return;
+  }
+
+  const gatewayId = path[0];
+  const view = path[1];
+
+  function changeGateway(event: ChangeEvent<HTMLSelectElement>): void {
+    window.location.href = `/${event.target.value}/${view}`;
+  }
+
   return [
-    <header data-bs-theme="dark">
+    <header key="header" data-bs-theme="dark">
       <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">mt-stats</a>
@@ -24,9 +44,11 @@ export default (props: IAppProps) => {
               </li>
             </ul>
             <form className="d-flex" role="search" style={{ margin: 0 }}>
-              <select className="form-select me-2">
+              <select className="form-select me-2" onChange={changeGateway} value={gatewayId}>
                 {
-                  StateService.Gateways.map(x => <option value={x.Id}>{x.Name}</option>)
+                  StateService.Gateways.map((x, i) =>
+                    <option key={i} value={x.Id}>{x.Name}</option>
+                  )
                 }
               </select>
             </form>
@@ -34,7 +56,7 @@ export default (props: IAppProps) => {
         </div>
       </nav>
     </header>,
-    <main>
+    <main key="main">
 
       <div id="myCarousel" className="carousel slide mb-6" data-bs-ride="carousel">
         <div className="carousel-indicators">

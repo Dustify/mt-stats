@@ -11,8 +11,9 @@ const dirname = path.dirname(__filename);
 const app = express();
 
 app.use(express.static(path.join(dirname, "..", "..", "public")));
-
 app.use("/api", apiRouter);
+app.get('*', (req, res) => res.sendFile(path.resolve(dirname, "..", "..", "public", "index.html")));
+
 
 const server = http.createServer(app);
 server.listen(3000);

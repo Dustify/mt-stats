@@ -4,4 +4,4 @@ sonar.sh
 .scannerwork
 dist
 .nx/cache
-bundle.js
+bundle.js*

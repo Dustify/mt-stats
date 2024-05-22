@@ -1,5 +1,5 @@
 export interface ISignal {
-    timestamp: Date;
+    t: string;
     snr_min: number;
     snr_max: number;
     snr_med: number;

@@ -33,7 +33,7 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
     async GetSignal(gatewayId: string): Promise<ISignal[]> {
         const query = `
             SELECT
-                date_trunc('hour', "timestamp") as "timestamp",
+                date_trunc('hour', "timestamp") as "t",
                 min("packet_rxSnr") as "snr_min",
                 max("packet_rxSnr") as "snr_max",
                 median("packet_rxSnr") as "snr_med",
@@ -50,9 +50,9 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
                 "timestamp" >= (NOW() - INTERVAL '7 DAYS') and
                 "gatewayId" = $1
             GROUP BY
-                "timestamp"
+                "t"
             ORDER BY 
-                "timestamp"
+                "t"
         `;
 
         return (await this.Client.query(query, [gatewayId])).rows;

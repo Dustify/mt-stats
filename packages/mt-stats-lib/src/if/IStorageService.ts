@@ -1,6 +1,7 @@
 import { ICompleteMessage } from "../model/ICompleteMessage";
 import { IGateway } from "../model/IGateway";
 import { IRawMessage } from "../model/IRawMessage";
+import { ISignal } from "../model/ISignal";
 import { IUnpackedMessage } from "../model/IUnpackedMessage";
 
 export interface IStorageService {
@@ -15,4 +16,5 @@ export interface IStorageService {
     StoreCompleteMessage(message: ICompleteMessage): Promise<void>;
 
     GetGateways(): Promise<IGateway[]>;
+    GetSignal(gatewayId: string): Promise<ISignal[]>;
 }

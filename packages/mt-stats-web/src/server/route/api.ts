@@ -10,3 +10,6 @@ apiRouter.get("/gateways", async (req, res) => {
     res.send(await storageService.GetGateways());
 });
 
+apiRouter.get("/signal/:gatewayId", async (req, res) => {
+    res.send(await storageService.GetSignal(req.params.gatewayId));
+});

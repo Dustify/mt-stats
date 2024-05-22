@@ -7,6 +7,7 @@ import { ICompleteMessage } from "../model/ICompleteMessage.js";
 import { ServiceBase } from "./ServiceBase.js";
 import { SchemaUpdates } from "../util/SchemaUpdates.js";
 import { IGateway } from "../model/IGateway.js";
+import { ISignal } from "../model/ISignal.js";
 
 export class PostgresStorageService extends ServiceBase implements IStorageService {
     private Client: pg.Client;
@@ -27,6 +28,34 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
         this.Client = new pg.Client(opts);
 
         this.Info("constructor end");
+    }
+
+    async GetSignal(gatewayId: string): Promise<ISignal[]> {
+        const query = `
+            SELECT
+                date_trunc('hour', "timestamp") as "timestamp",
+                min("packet_rxSnr") as "snr_min",
+                max("packet_rxSnr") as "snr_max",
+                median("packet_rxSnr") as "snr_med",
+                avg("packet_rxSnr") as "snr_avg",
+                
+                min("packet_rxRssi") as "rssi_min",
+                max("packet_rxRssi") as "rssi_max",
+                median("packet_rxRssi") as "rssi_med",
+                avg("packet_rxRssi") as "rssi_avg"
+                
+            FROM 
+                public.raw_pb
+            WHERE
+                "timestamp" >= (NOW() - INTERVAL '7 DAYS') and
+                "gatewayId" = $1
+            GROUP BY
+                "timestamp"
+            ORDER BY 
+                "timestamp"
+        `;
+
+        return (await this.Client.query(query, [gatewayId])).rows;
     }
 
     public async GetGateways(): Promise<IGateway[]> {

@@ -22,7 +22,7 @@ import { Layout } from "./components/Layout.js";
     createRoutesFromElements([
       <Route element={<Layout />}>
         <Route path="/:gatewayId/signal" element={<Signal />} loader={SignalLoader} />,
-        <Route path="*" element={<Navigate to={defaultRoute} />} />
+        <Route path="/*" element={<Navigate to={defaultRoute} />} />
       </Route>
     ]));
 

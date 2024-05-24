@@ -34,7 +34,30 @@ export const SignalLoader = async ({ params }: any) => {
 export const Signal = () => {
     const data = useLoaderData() as ISignal[];
 
-    const labels = data.map(x => new Date(x.t).toString().substring(0, 21));
+    const labels: string[] = [];
+
+    let currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() - 7);
+    currentDate = new Date(currentDate.toISOString().substring(0, 14) + "00:00.000Z");
+
+    const processedData: ISignal[] = [];
+
+    for (let i = 0; i < 168; i++) {
+        const isoTimestamp = currentDate.toISOString();
+        const item = data.find(x => x.t === isoTimestamp);
+
+        const timestamp = currentDate.toString().substring(0, 21);
+
+        let result: ISignal = {
+            ...item,
+            t: timestamp
+        };
+
+        labels.push(timestamp);
+        processedData.push(result);
+
+        currentDate.setHours(currentDate.getHours() + 1);
+    }
 
     const snr = {
         opts: {
@@ -54,19 +77,19 @@ export const Signal = () => {
             datasets: [
                 {
                     label: 'Minimum',
-                    data: data.map(x => x.snr_min),
+                    data: processedData.map(x => x.snr_min),
                 },
                 {
                     label: 'Maximum',
-                    data: data.map(x => x.snr_max),
+                    data: processedData.map(x => x.snr_max),
                 },
                 {
                     label: 'Average',
-                    data: data.map(x => x.snr_avg),
+                    data: processedData.map(x => x.snr_avg),
                 },
                 {
                     label: 'Median',
-                    data: data.map(x => x.snr_med),
+                    data: processedData.map(x => x.snr_med),
                 },
             ]
         }
@@ -90,19 +113,19 @@ export const Signal = () => {
             datasets: [
                 {
                     label: 'Minimum',
-                    data: data.map(x => x.rssi_min),
+                    data: processedData.map(x => x.rssi_min),
                 },
                 {
                     label: 'Maximum',
-                    data: data.map(x => x.rssi_max),
+                    data: processedData.map(x => x.rssi_max),
                 },
                 {
                     label: 'Average',
-                    data: data.map(x => x.rssi_avg),
+                    data: processedData.map(x => x.rssi_avg),
                 },
                 {
                     label: 'Median',
-                    data: data.map(x => x.rssi_med),
+                    data: processedData.map(x => x.rssi_med),
                 },
             ]
         }

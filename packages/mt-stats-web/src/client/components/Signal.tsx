@@ -15,6 +15,8 @@ import {
 import { Line } from "react-chartjs-2";
 import { useLoaderData } from "react-router-dom";
 import { ISignal } from "mt-stats-lib/dist/model/ISignal";
+import Annotation from "chartjs-plugin-annotation";
+import { ChartService } from "../service/ChartService.js";
 
 ChartJS.register(
     CategoryScale,
@@ -24,7 +26,8 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    Colors
+    Colors,
+    Annotation
 );
 
 export const SignalLoader = async ({ params }: any) => {
@@ -33,106 +36,48 @@ export const SignalLoader = async ({ params }: any) => {
 
 export const Signal = () => {
     const data = useLoaderData() as ISignal[];
+    const expand = ChartService.ExpandData(data);
 
-    const labels: string[] = [];
-
-    let currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() - 7);
-    currentDate = new Date(currentDate.toISOString().substring(0, 14) + "00:00.000Z");
-
-    const processedData: ISignal[] = [];
-
-    for (let i = 0; i < 168; i++) {
-        const isoTimestamp = currentDate.toISOString();
-        const item = data.find(x => x.t === isoTimestamp);
-
-        const timestamp = currentDate.toString().substring(0, 21);
-
-        let result: ISignal = {
-            ...item,
-            t: timestamp
-        };
-
-        labels.push(timestamp);
-        processedData.push(result);
-
-        currentDate.setHours(currentDate.getHours() + 1);
-    }
-
-    const snr = {
-        opts: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top' as const,
-                },
-                title: {
-                    display: true,
-                    text: 'SNR',
-                },
-            }
+    const snr = ChartService.GetChartProps(expand, [
+        {
+            label: 'Minimum',
+            data: expand.data.map(x => x.snr_min),
         },
-        data: {
-            labels,
-            datasets: [
-                {
-                    label: 'Minimum',
-                    data: processedData.map(x => x.snr_min),
-                },
-                {
-                    label: 'Maximum',
-                    data: processedData.map(x => x.snr_max),
-                },
-                {
-                    label: 'Average',
-                    data: processedData.map(x => x.snr_avg),
-                },
-                {
-                    label: 'Median',
-                    data: processedData.map(x => x.snr_med),
-                },
-            ]
-        }
-    };
-
-    const rssi = {
-        opts: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top' as const,
-                },
-                title: {
-                    display: true,
-                    text: 'RSSI',
-                },
-            }
+        {
+            label: 'Maximum',
+            data: expand.data.map(x => x.snr_max),
         },
-        data: {
-            labels,
-            datasets: [
-                {
-                    label: 'Minimum',
-                    data: processedData.map(x => x.rssi_min),
-                },
-                {
-                    label: 'Maximum',
-                    data: processedData.map(x => x.rssi_max),
-                },
-                {
-                    label: 'Average',
-                    data: processedData.map(x => x.rssi_avg),
-                },
-                {
-                    label: 'Median',
-                    data: processedData.map(x => x.rssi_med),
-                },
-            ]
-        }
-    };
+        {
+            label: 'Average',
+            data: expand.data.map(x => x.snr_avg),
+        },
+        {
+            label: 'Median',
+            data: expand.data.map(x => x.snr_med),
+        },
+    ]);
+
+    const rssi = ChartService.GetChartProps(expand, [
+        {
+            label: 'Minimum',
+            data: expand.data.map(x => x.rssi_min),
+        },
+        {
+            label: 'Maximum',
+            data: expand.data.map(x => x.rssi_max),
+        },
+        {
+            label: 'Average',
+            data: expand.data.map(x => x.rssi_avg),
+        },
+        {
+            label: 'Median',
+            data: expand.data.map(x => x.rssi_med),
+        },
+    ]);
 
     return <div className="container">
-        <Line options={snr.opts} data={snr.data} />
-        <Line options={rssi.opts} data={rssi.data} />
+        <Line {...snr} />
+        <Line {...rssi} />
     </div>;
 }

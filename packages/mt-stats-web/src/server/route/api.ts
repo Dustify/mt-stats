@@ -13,3 +13,7 @@ apiRouter.get("/gateways", async (req, res) => {
 apiRouter.get("/signal/:gatewayId", async (req, res) => {
     res.send(await storageService.GetSignal(req.params.gatewayId));
 });
+
+apiRouter.get("/util/:gatewayId", async (req, res) => {
+    res.send(await storageService.GetUtil(req.params.gatewayId));
+});

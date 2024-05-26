@@ -7,7 +7,8 @@ import { ICompleteMessage } from "../model/ICompleteMessage.js";
 import { ServiceBase } from "./ServiceBase.js";
 import { SchemaUpdates } from "../util/SchemaUpdates.js";
 import { IGateway } from "../model/IGateway.js";
-import { ISignal } from "../model/ISignal.js";
+import { ISignal } from "../model/outputs/ISignal.js";
+import { IUtil } from "../model/outputs/IUtil.js";
 
 export class PostgresStorageService extends ServiceBase implements IStorageService {
     private Client: pg.Client;
@@ -28,6 +29,34 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
         this.Client = new pg.Client(opts);
 
         this.Info("constructor end");
+    }
+
+    async GetUtil(gatewayId: string): Promise<IUtil[]> {
+        const query = `
+            SELECT
+                date_trunc('hour', "timestamp") as "t",
+                min("TELEMETRY_APP_deviceMetrics_channelUtilization") as "cu_min",
+                max("TELEMETRY_APP_deviceMetrics_channelUtilization") as "cu_max",
+                median("TELEMETRY_APP_deviceMetrics_channelUtilization") as "cu_med",
+                avg("TELEMETRY_APP_deviceMetrics_channelUtilization") as "cu_avg",
+                
+                min("TELEMETRY_APP_deviceMetrics_airUtilTx") as "aut_min",
+                max("TELEMETRY_APP_deviceMetrics_airUtilTx") as "aut_max",
+                median("TELEMETRY_APP_deviceMetrics_airUtilTx") as "aut_med",
+                avg("TELEMETRY_APP_deviceMetrics_airUtilTx") as "aut_avg"
+                
+            FROM 
+                public.raw_pb
+            WHERE
+                "timestamp" >= (NOW() - INTERVAL '7 DAYS') and
+                "gatewayId" = $1
+            GROUP BY
+                "t"
+            ORDER BY 
+                "t"
+        `;
+
+        return (await this.Client.query(query, [gatewayId])).rows;
     }
 
     async GetSignal(gatewayId: string): Promise<ISignal[]> {

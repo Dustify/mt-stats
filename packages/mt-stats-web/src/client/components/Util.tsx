@@ -17,6 +17,7 @@ import { useLoaderData } from "react-router-dom";
 import { ISignal } from "mt-stats-lib/dist/model/ISignal";
 import Annotation from "chartjs-plugin-annotation";
 import { ChartService } from "../service/ChartService.js";
+import { IUtil } from "mt-stats-lib/dist/model/outputs/IUtil.js";
 
 ChartJS.register(
     CategoryScale,
@@ -30,58 +31,58 @@ ChartJS.register(
     Annotation
 );
 
-export const SignalLoader = async ({ params }: any) => {
-    return (await axios.get(`/api/signal/${params.gatewayId}`)).data;
+export const UtilLoader = async ({ params }: any) => {
+    return (await axios.get(`/api/util/${params.gatewayId}`)).data;
 };
 
-export const Signal = () => {
-    const data = useLoaderData() as ISignal[];
+export const Util = () => {
+    const data = useLoaderData() as IUtil[];
     const expand = ChartService.ExpandData(data);
 
-    const snr = ChartService.GetChartProps(
-        "SNR",
+    const cu = ChartService.GetChartProps(
+        "Channel Utilisation",
         expand, [
         {
             label: 'Minimum',
-            data: expand.data.map(x => x.snr_min),
+            data: expand.data.map(x => x.cu_min),
         },
         {
             label: 'Maximum',
-            data: expand.data.map(x => x.snr_max),
+            data: expand.data.map(x => x.cu_max),
         },
         {
             label: 'Average',
-            data: expand.data.map(x => x.snr_avg),
+            data: expand.data.map(x => x.cu_avg),
         },
         {
             label: 'Median',
-            data: expand.data.map(x => x.snr_med),
+            data: expand.data.map(x => x.cu_med),
         },
     ]);
 
-    const rssi = ChartService.GetChartProps(
-        "RSSI",
+    const aut = ChartService.GetChartProps(
+        "TX Utilisation",
         expand, [
         {
             label: 'Minimum',
-            data: expand.data.map(x => x.rssi_min),
+            data: expand.data.map(x => x.aut_min),
         },
         {
             label: 'Maximum',
-            data: expand.data.map(x => x.rssi_max),
+            data: expand.data.map(x => x.aut_max),
         },
         {
             label: 'Average',
-            data: expand.data.map(x => x.rssi_avg),
+            data: expand.data.map(x => x.aut_avg),
         },
         {
             label: 'Median',
-            data: expand.data.map(x => x.rssi_med),
+            data: expand.data.map(x => x.aut_med),
         },
     ]);
 
     return <div className="container">
-        <Line {...snr} />
-        <Line {...rssi} />
+        <Line {...cu} />
+        <Line {...aut} />
     </div>;
 }

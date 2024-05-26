@@ -54,7 +54,7 @@ export class ChartService {
         };
     }
 
-    static GetChartProps<T extends ITimestamped>(expand: IExpandedData<T>, dataSets: any[]) {
+    static GetChartProps<T extends ITimestamped>(title: string, expand: IExpandedData<T>, dataSets: any[]) {
         const opts = {
             responsive: true,
             plugins: {
@@ -63,7 +63,7 @@ export class ChartService {
                 },
                 title: {
                     display: true,
-                    text: 'SNR',
+                    text: title,
                 },
                 annotation: {
                     annotations: expand.annotations

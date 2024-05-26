@@ -46,7 +46,8 @@ export const Header = () => {
 
                                 const route = `/${gatewayId}/${x.Key}`;
 
-                                const click = () => {
+                                const click = (event: React.MouseEvent<HTMLAnchorElement>) => {
+                                    event.preventDefault();
                                     navigate(route);
                                 };
 

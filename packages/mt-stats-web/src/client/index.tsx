@@ -15,7 +15,8 @@ import {
   Title,
   Tooltip,
   Legend,
-  Colors
+  Colors,
+  BarElement
 } from 'chart.js';
 import Annotation from "chartjs-plugin-annotation";
 import { Packets, PacketsLoader } from "./components/Packets.js";
@@ -29,7 +30,8 @@ ChartJS.register(
   Tooltip,
   Legend,
   Colors,
-  Annotation
+  Annotation,
+  BarElement
 );
 
 (async () => {
@@ -50,7 +52,7 @@ ChartJS.register(
       <Route element={<Layout />}>
         <Route path="/:gatewayId/signal" element={<Signal />} loader={SignalLoader} />,
         <Route path="/:gatewayId/util" element={<Util />} loader={UtilLoader} />,
-        <Route path="/:gatewayId/packets" element={<Packets />} loader={PacketsLoader} />,
+        <Route path="/:gatewayId/other" element={<Packets />} loader={PacketsLoader} />,
         <Route path="/*" element={<Navigate to={defaultRoute} />} />
       </Route>
     ]));

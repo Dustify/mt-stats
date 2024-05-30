@@ -24,8 +24,8 @@ export const Header = () => {
             Name: "Utilisation"
         },
         {
-            Key: "packets",
-            Name: "Packets"
+            Key: "other",
+            Name: "Other"
         },
     ];
 

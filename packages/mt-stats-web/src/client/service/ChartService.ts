@@ -1,3 +1,4 @@
+import { ChartTypeRegistry } from "chart.js";
 import { LineAnnotationOptions } from "chartjs-plugin-annotation";
 
 type TAnnotations = { [key: string]: LineAnnotationOptions };
@@ -68,7 +69,15 @@ export class ChartService {
                 annotation: {
                     annotations: expand.annotations
                 }
-            }
+            },
+            scales: {
+                x: {
+                    stacked: false,
+                },
+                y: {
+                    stacked: false,
+                },
+            },
         };
 
         const data = {

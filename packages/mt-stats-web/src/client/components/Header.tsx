@@ -22,7 +22,11 @@ export const Header = () => {
         {
             Key: "util",
             Name: "Utilisation"
-        }
+        },
+        {
+            Key: "packets",
+            Name: "Packets"
+        },
     ];
 
     return <header key="header" data-bs-theme="dark">

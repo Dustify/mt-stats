@@ -17,3 +17,7 @@ apiRouter.get("/signal/:gatewayId", async (req, res) => {
 apiRouter.get("/util/:gatewayId", async (req, res) => {
     res.send(await storageService.GetUtil(req.params.gatewayId));
 });
+
+apiRouter.get("/packets/:gatewayId", async (req, res) => {
+    res.send(await storageService.GetPackets(req.params.gatewayId));
+});

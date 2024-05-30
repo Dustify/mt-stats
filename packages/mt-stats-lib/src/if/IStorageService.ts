@@ -4,6 +4,7 @@ import { IRawMessage } from "../model/IRawMessage";
 import { ISignal } from "../model/outputs/ISignal";
 import { IUnpackedMessage } from "../model/IUnpackedMessage";
 import { IUtil } from "../model/outputs/IUtil";
+import { IPackets } from "../model/outputs/IPackets";
 
 export interface IStorageService {
     Connect(): Promise<void>;
@@ -20,4 +21,5 @@ export interface IStorageService {
 
     GetSignal(gatewayId: string): Promise<ISignal[]>;
     GetUtil(gatewayId: string): Promise<IUtil[]>;
+    GetPackets(gatewayId: string): Promise<IPackets[]>;
 }

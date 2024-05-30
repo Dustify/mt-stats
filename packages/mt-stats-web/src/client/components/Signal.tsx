@@ -1,34 +1,10 @@
 
 import axios from "axios";
 import React from "react";
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    Colors
-} from 'chart.js';
 import { Line } from "react-chartjs-2";
 import { useLoaderData } from "react-router-dom";
 import { ISignal } from "mt-stats-lib/dist/model/ISignal";
-import Annotation from "chartjs-plugin-annotation";
 import { ChartService } from "../service/ChartService.js";
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    Colors,
-    Annotation
-);
 
 export const SignalLoader = async ({ params }: any) => {
     return (await axios.get(`/api/signal/${params.gatewayId}`)).data;

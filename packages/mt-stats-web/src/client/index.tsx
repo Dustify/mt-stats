@@ -6,6 +6,32 @@ import { Signal, SignalLoader } from "./components/Signal.js";
 import { Layout } from "./components/Layout.js";
 import { Util, UtilLoader } from "./components/Util.js";
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Colors
+} from 'chart.js';
+import Annotation from "chartjs-plugin-annotation";
+import { Packets, PacketsLoader } from "./components/Packets.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Colors,
+  Annotation
+);
+
 (async () => {
   await StateService.init();
 
@@ -24,6 +50,7 @@ import { Util, UtilLoader } from "./components/Util.js";
       <Route element={<Layout />}>
         <Route path="/:gatewayId/signal" element={<Signal />} loader={SignalLoader} />,
         <Route path="/:gatewayId/util" element={<Util />} loader={UtilLoader} />,
+        <Route path="/:gatewayId/packets" element={<Packets />} loader={PacketsLoader} />,
         <Route path="/*" element={<Navigate to={defaultRoute} />} />
       </Route>
     ]));

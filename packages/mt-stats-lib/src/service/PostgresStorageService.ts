@@ -9,6 +9,7 @@ import { SchemaUpdates } from "../util/SchemaUpdates.js";
 import { IGateway } from "../model/IGateway.js";
 import { ISignal } from "../model/outputs/ISignal.js";
 import { IUtil } from "../model/outputs/IUtil.js";
+import { IPackets } from "../model/outputs/IPackets.js";
 
 export class PostgresStorageService extends ServiceBase implements IStorageService {
     private Client: pg.Client;
@@ -29,6 +30,36 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
         this.Client = new pg.Client(opts);
 
         this.Info("constructor end");
+    }
+
+    public async GetPackets(gatewayId: string): Promise<IPackets[]> {
+        const query = `
+            SELECT
+                date_trunc('hour', "timestamp") as "t",
+                count(*) as "packet_count",	
+                count(*) filter (where packet_to = 4294967295 and packet_decoded_portnum != 'TEXT_MESSAGE_APP') AS "packet_timed",
+                count(*) filter (where packet_to != 4294967295 and packet_decoded_portnum = 'NODEINFO_APP') AS "packet_nodeinfo_direct",
+                count(*) filter (where packet_to != 4294967295 and packet_decoded_portnum = 'TRACEROUTE_APP' and "packet_decoded_wantResponse" = true) AS "packet_tr_req",
+                count(*) filter (where packet_to != 4294967295 and packet_decoded_portnum = 'TRACEROUTE_APP' and "packet_decoded_wantResponse" is null) AS "packet_tr_res",
+                count(*) filter (where packet_to != 4294967295 and packet_decoded_portnum = 'ROUTING_APP' and "packet_decoded_wantResponse" is null) AS "packet_routing",
+                count(*) filter (where packet_to != 4294967295 and packet_decoded_portnum = 'POSITION_APP' and "packet_decoded_wantResponse" = true) AS "packet_pos_req",
+                count(*) filter (where packet_to != 4294967295 and packet_decoded_portnum = 'POSITION_APP' and "packet_decoded_wantResponse" is null) AS "packet_pos_direct",
+                count(*) filter (where packet_decoded_portnum = 'TEXT_MESSAGE_APP') AS "packet_text",
+        
+                count(distinct packet_from) as "senders",
+                count(distinct packet_to) as "receivers"	           
+            FROM 
+                public.raw_pb
+            WHERE
+                "timestamp" >= (NOW() - INTERVAL '7 DAYS') and
+                "gatewayId" = $1
+            GROUP BY
+                "t"
+            ORDER BY 
+                "t"
+        `;
+
+        return (await this.Client.query(query, [gatewayId])).rows;
     }
 
     async GetUtil(gatewayId: string): Promise<IUtil[]> {

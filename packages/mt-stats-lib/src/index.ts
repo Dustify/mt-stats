@@ -9,6 +9,10 @@ export * from "./model/IUnpackedMessage.js";
 export * from "./model/ICompleteMessage.js";
 export * from "./model/IGateway.js";
 
+export * from "./model/outputs/ISignal.js";
+export * from "./model/outputs/IUtil.js";
+export * from "./model/outputs/IPackets.js";
+
 // services
 export * from "./service/PostgresStorageService.js";
 export * from "./service/MosquittoMessageService.js";

@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { StateService } from "../service/StateService.js";
 import { useNavigate, useParams } from "react-router-dom";
+import { Routes } from "../Routes.js";
 
 export const Header = () => {
     const navigate = useNavigate();
@@ -14,21 +15,6 @@ export const Header = () => {
         navigate(`/${newGatewayId}/${view}`);
     };
 
-    const views = [
-        {
-            Key: "signal",
-            Name: "Signal"
-        },
-        {
-            Key: "util",
-            Name: "Utilisation"
-        },
-        {
-            Key: "other",
-            Name: "Other"
-        },
-    ];
-
     return <header key="header" data-bs-theme="dark">
         <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div className="container-fluid">
@@ -41,7 +27,7 @@ export const Header = () => {
                 <div className="collapse navbar-collapse" id="navbarCollapse">
                     <ul className="navbar-nav me-auto mb-2 mb-md-0">
                         {
-                            views.map((x, i) => {
+                            Routes.filter(x => x.ShowInHeader).map((x, i) => {
                                 let className = "nav-link";
 
                                 if (x.Key === view) {

@@ -12,6 +12,8 @@ export * from "./model/IGateway.js";
 export * from "./model/outputs/ISignal.js";
 export * from "./model/outputs/IUtil.js";
 export * from "./model/outputs/IPackets.js";
+export * from "./model/outputs/INode.js";
+export * from "./model/outputs/IVoltage.js";
 
 // services
 export * from "./service/PostgresStorageService.js";

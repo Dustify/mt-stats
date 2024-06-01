@@ -2,9 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { StateService } from "./service/StateService.js";
 import { Navigate, Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
-import { Signal, SignalLoader } from "./components/Signal.js";
 import { Layout } from "./components/Layout.js";
-import { Util, UtilLoader } from "./components/Util.js";
 
 import {
   Chart as ChartJS,
@@ -19,7 +17,7 @@ import {
   BarElement
 } from 'chart.js';
 import Annotation from "chartjs-plugin-annotation";
-import { Packets, PacketsLoader } from "./components/Packets.js";
+import { Routes } from "./Routes.js";
 
 ChartJS.register(
   CategoryScale,
@@ -50,9 +48,10 @@ ChartJS.register(
   const router = createBrowserRouter(
     createRoutesFromElements([
       <Route element={<Layout />}>
-        <Route path="/:gatewayId/signal" element={<Signal />} loader={SignalLoader} />,
-        <Route path="/:gatewayId/util" element={<Util />} loader={UtilLoader} />,
-        <Route path="/:gatewayId/other" element={<Packets />} loader={PacketsLoader} />,
+        {
+          Routes.map(x => <Route path={x.Path} element={x.Element} loader={x.Loader} />)
+        }
+
         <Route path="/*" element={<Navigate to={defaultRoute} />} />
       </Route>
     ]));

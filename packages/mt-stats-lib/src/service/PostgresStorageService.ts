@@ -10,6 +10,8 @@ import { IGateway } from "../model/IGateway.js";
 import { ISignal } from "../model/outputs/ISignal.js";
 import { IUtil } from "../model/outputs/IUtil.js";
 import { IPackets } from "../model/outputs/IPackets.js";
+import { INode } from "../model/outputs/INode.js";
+import { IVoltage } from "../model/outputs/IVoltage.js";
 
 export class PostgresStorageService extends ServiceBase implements IStorageService {
     private Client: pg.Client;
@@ -30,6 +32,51 @@ export class PostgresStorageService extends ServiceBase implements IStorageServi
         this.Client = new pg.Client(opts);
 
         this.Info("constructor end");
+    }
+
+    public async GetVoltage(gatewayId: string, nodeId: number): Promise<IVoltage[]> {
+        const query = `
+            SELECT
+                date_trunc('hour', "timestamp") as "t",
+                min("TELEMETRY_APP_deviceMetrics_voltage") as "v_min",
+                max("TELEMETRY_APP_deviceMetrics_voltage") as "v_max",
+                median("TELEMETRY_APP_deviceMetrics_voltage") as "v_med",
+                avg("TELEMETRY_APP_deviceMetrics_voltage") as "v_avg"
+            FROM 
+                public.raw_pb
+            WHERE
+                "packet_from" = $1 and
+                "gatewayId" = $2 and
+                "packet_decoded_portnum" = 'TELEMETRY_APP' and
+                "TELEMETRY_APP_deviceMetrics_voltage" is not null and
+                "timestamp" >= (NOW() - INTERVAL '7 DAYS')
+            group by
+                "t"
+            ORDER BY 
+                "t" asc
+        `;
+
+        return (await this.Client.query(query, [nodeId, gatewayId])).rows;
+    }
+
+    public async GetNodes(gatewayId: string): Promise<INode[]> {
+        const query = `
+            SELECT
+                distinct on ("packet_from")
+                packet_from as "id",
+                "NODEINFO_APP_shortName" as "short",
+                "NODEINFO_APP_longName" as "long"
+            FROM 
+                public.raw_pb
+            WHERE
+                "gatewayId" = $1 and
+                packet_decoded_portnum = 'NODEINFO_APP'
+            ORDER BY
+                packet_from,
+                "timestamp" desc
+        `;
+
+        return (await this.Client.query(query, [gatewayId])).rows;
     }
 
     public async GetPackets(gatewayId: string): Promise<IPackets[]> {

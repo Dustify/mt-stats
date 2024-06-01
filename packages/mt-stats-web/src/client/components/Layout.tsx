@@ -6,7 +6,7 @@ import { Header } from "./Header.js";
 export const Layout = () => {
     return <>
         <Routes>
-            <Route path="/:gatewayId/:view" element={<Header />} />
+            <Route path="/:gatewayId/:view/*" element={<Header />} />
         </Routes>
         <main style={{ marginTop: 56 }}>
             <Outlet />

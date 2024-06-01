@@ -26,4 +26,6 @@ export interface IStorageService {
     GetPackets(gatewayId: string): Promise<IPackets[]>;
     GetNodes(gatewayId: string): Promise<INode[]>;
     GetVoltage(gatewayId: string, nodeId: number): Promise<IVoltage[]>;
+
+    GetSenders(gatewayId: string): Promise<any[]>;
 }

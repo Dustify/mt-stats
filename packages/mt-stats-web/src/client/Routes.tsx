@@ -4,6 +4,7 @@ import { Util, UtilLoader } from "./components/Util.js";
 import { Packets, PacketsLoader } from "./components/Packets.js";
 import { Voltage, VoltageLoader, VoltageLoaderInitial } from "./components/Voltage.js";
 import { LoaderFunction } from "react-router-dom";
+import { Senders, SendersLoader } from "./components/Senders.js";
 
 interface IRoute {
     Key: string;
@@ -54,5 +55,13 @@ export const Routes: IRoute[] = [
         Element: <Voltage />,
         Loader: VoltageLoader,
         ShowInHeader: false
+    },
+    {
+        Key: "senders",
+        Name: "Senders",
+        Path: "/:gatewayId/senders",
+        Element: <Senders />,
+        Loader: SendersLoader,
+        ShowInHeader: true
     },
 ];

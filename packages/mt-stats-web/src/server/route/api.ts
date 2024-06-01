@@ -31,3 +31,7 @@ apiRouter.get("/voltage/:gatewayId/:nodeId", async (req, res) => {
 
     res.send(await storageService.GetVoltage(params.gatewayId, parseInt(params.nodeId)));
 });
+
+apiRouter.get("/senders/:gatewayId", async (req, res) => {
+    res.send(await storageService.GetSenders(req.params.gatewayId));
+});

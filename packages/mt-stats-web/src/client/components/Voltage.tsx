@@ -1,14 +1,12 @@
 
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { ChangeEvent } from "react";
 import { Line } from "react-chartjs-2";
-import { Navigate, useLoaderData, useNavigate } from "react-router-dom";
-import { ISignal } from "mt-stats-lib/dist/model/ISignal";
+import { Navigate, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { ChartService } from "../service/ChartService.js";
 import { INode, IVoltage } from "mt-stats-lib";
 
 interface IVoltageData {
-    gatewayId: string;
     nodes: INode[];
     voltage?: IVoltage[];
 }
@@ -16,9 +14,11 @@ interface IVoltageData {
 export const VoltageLoaderInitial = async ({ params }: any) => {
     const gatewayId = params.gatewayId;
 
+    let nodes: INode[] = (await axios.get(`/api/nodes/${gatewayId}`)).data;
+    nodes = nodes.sort((a, b) => a.short > b.short ? 1 : -1);
+
     const result: IVoltageData = {
-        gatewayId: gatewayId,
-        nodes: (await axios.get(`/api/nodes/${gatewayId}`)).data
+        nodes
     };
 
     return result;
@@ -32,25 +32,24 @@ export const VoltageLoader = async ({ params }: any) => {
     const voltage: IVoltage[] = (await axios.get(`/api/voltage/${gatewayId}/${nodeId}`)).data;
 
     const result: IVoltageData = {
-        gatewayId: gatewayId,
         nodes,
         voltage
     };
-
-    if (!params.nodeId) {
-        const navigate = useNavigate();
-        navigate(`/${gatewayId}/voltageId/${result.nodes[0].id}`);
-        return;
-    }
 
     return result;
 };
 
 export const Voltage = () => {
+    const params = useParams();
     const data = useLoaderData() as IVoltageData;
 
+    if (!params.gatewayId) {
+        return <>Blorg</>;
+    }
+
     if (!data.voltage) {
-        const route = `/${data.gatewayId}/voltage/${data.nodes[0].id}`;
+        const nodeId = Number("0x" + params.gatewayId.substring(1))
+        const route = `/${params.gatewayId}/voltage/${nodeId}`;
 
         return <Navigate to={route} />;
     }
@@ -78,7 +77,27 @@ export const Voltage = () => {
         },
     ]);
 
-    return <div className="container">
+    const navigate = useNavigate();
+
+    const changeNode = (event: ChangeEvent<HTMLSelectElement>) => {
+        const nodeId = event.target.value;
+
+        navigate(`/${params.gatewayId}/voltage/${nodeId}`);
+    };
+
+    const nodes = data.nodes.sort((a, b) => a.short > b.short ? 1 : -1);
+
+    return <>
+        <select
+            className="form-select me-2"
+            onChange={changeNode}
+            value={params.nodeId}>
+            {
+                nodes.map((x, i) =>
+                    <option key={i} value={x.id}>({x.short}) {x.long}</option>
+                )
+            }
+        </select>
         <Line {...v} />
-    </div>;
+    </>;
 }

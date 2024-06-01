@@ -78,6 +78,7 @@ export class ChartService {
                     stacked: false,
                 },
             },
+            // maintainAspectRatio: false
         };
 
         const data = {
@@ -88,7 +89,9 @@ export class ChartService {
         return {
             type: "line",
             options: opts,
-            data: data
+            data: data,
+            // width: "100%",
+            // height: "512px"
         };
     }
 }

@@ -58,8 +58,8 @@ export const Util = () => {
         },
     ]);
 
-    return <div className="container">
+    return <>
         <Line {...cu} />
         <Line {...aut} />
-    </div>;
+    </>;
 }

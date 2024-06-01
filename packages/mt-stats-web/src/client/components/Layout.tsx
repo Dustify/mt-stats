@@ -8,8 +8,10 @@ export const Layout = () => {
         <Routes>
             <Route path="/:gatewayId/:view/*" element={<Header />} />
         </Routes>
-        <main style={{ marginTop: 56 }}>
-            <Outlet />
+        <main style={{ marginTop: 56, padding: 10 }}>
+            <div className="container">
+                <Outlet />
+            </div>
         </main>
         <Footer />
     </>;

@@ -75,9 +75,9 @@ export const Packets = () => {
         }
     ]);
 
-    return <div className="container">
+    return <>
         <Line {...packet_count} />
         <Bar {...breakdown} />
         <Line {...sr} />
-    </div>;
+    </>;
 }

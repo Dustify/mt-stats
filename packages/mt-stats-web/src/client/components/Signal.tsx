@@ -56,8 +56,8 @@ export const Signal = () => {
         },
     ]);
 
-    return <div className="container">
+    return <>
         <Line {...snr} />
         <Line {...rssi} />
-    </div>;
+    </>;
 }
